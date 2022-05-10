@@ -19,16 +19,18 @@ public class User {
     private String password;
     private String email;
     private String phone;
+    private boolean isAdmin;
 
     public User() {
     }
 
-    public User(String name, String username, String password, String email, String phone) {
+    public User(String name, String username, String password, String email, String phone, boolean isAdmin) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.email = email;
         this.phone = phone;
+        this.isAdmin = isAdmin;
     }
 
     public int getId() {
@@ -54,11 +56,15 @@ public class User {
     public String getPhone() {
         return phone;
     }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
     
     public void setId(int id) {
         this.id = id;
     }
-    
+        
     public void setName(String name) {
         this.name = name;
     }
@@ -77,6 +83,10 @@ public class User {
     
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void setIsAdmin(boolean isAdmin){
+        this.isAdmin = isAdmin;
     }
 
     @Override

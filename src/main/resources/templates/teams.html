@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>User List</title>
+        <meta charset="utf8"/>
+    </head>
+
+    <body>
+        <h1>List</h1>
+        <table>
+            <tr>
+                <th>Name</th>
+            </tr>
+            <tr th:each="t : ${teams}">
+                <td th:text="${t.name}">teamName</td>
+                <img th:src="${t.imageURL}" />
+            </tr>
+        </table>
+    </body>
+</html>

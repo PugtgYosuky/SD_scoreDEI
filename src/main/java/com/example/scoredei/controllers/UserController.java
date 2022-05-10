@@ -20,13 +20,4 @@ public class UserController {
         model.addAttribute("users", this.userService.getUsers());
         return "users";
     }
-    
-    @GetMapping("/add-user") 
-    public String addUser() {
-        User user = new User("asakjs", "asakjs", "asakjs", "asdasd", "jhasdhk");
-        userService.addUser(user);
-        return "redirect:/";
-    }
-    
-
 }

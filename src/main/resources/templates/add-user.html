@@ -1,0 +1,29 @@
+<form th:action="@{/admin/create-user}" th:object="${user}" method="post">
+    <div class="form-row">
+        <div>
+            <label>Name</label>
+            <input type="text" th:field="*{name}" placeholder="Name"/>
+        </div>
+        <div>
+            <label>Username</label>
+            <input type="text" th:field="*{username}" placeholder="Username"/>
+        </div>
+        <div>
+            <label>Email</label>
+            <input type="email" th:field="*{email}" placeholder="email@example.com"/>
+        </div>
+        <div>
+            <label>Password</label>
+            <input type="password" th:field="*{password}" placeholder="password"/>
+        </div>
+        <div>
+            <label>Phone</label>
+            <input type="text" th:field="*{phone}" placeholder="Phone"/>
+        </div>
+        <div>
+            <label>Is Admin?</label>
+            <input type="checkbox" th:field="*{isAdmin}" placeholder="Is Admin?"/>
+        </div>
+        <button type="submit">Create User</button>
+    </div>
+</form>
