@@ -21,7 +21,7 @@ public class Game {
     private String location;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date start;
-    @OneToMany
+    @OneToMany(mappedBy = "game")
     private List<Event> events;
 
     public Game() {

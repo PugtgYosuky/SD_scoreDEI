@@ -1,6 +1,7 @@
 package com.example.scoredei.data.events;
 
 import com.example.scoredei.data.Event;
+import com.example.scoredei.data.Game;
 import com.example.scoredei.data.Player;
 
 import javax.persistence.Entity;
@@ -16,12 +17,15 @@ public class EventYellowCard extends Event {
     public EventYellowCard() {
         super();
     }
+
+    public EventYellowCard(Game game) {
+        super(game);
+    }
     
-    public EventYellowCard(Date time, Player player) {
-        super(time);
+    public EventYellowCard(Game game, Date time, Player player) {
+        super(game, time);
         this.player = player;
     }
-
 
     public Player getPlayer() {
         return player;

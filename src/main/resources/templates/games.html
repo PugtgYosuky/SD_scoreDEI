@@ -20,7 +20,7 @@
                 <p th:text="${g.location}"></p>
                 <p th:text="${g.start}"></p>
             </div>
-            <div th:each="e : ${g.events}">
+            <div th:each="g : ${g.events}">
                 <p th:text="${g.time}"></p>
             </div>
         </div>

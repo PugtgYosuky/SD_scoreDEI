@@ -1,6 +1,7 @@
 package com.example.scoredei.data.events;
 
 import com.example.scoredei.data.Event;
+import com.example.scoredei.data.Game;
 import com.example.scoredei.data.Player;
 import com.example.scoredei.data.Team;
 
@@ -19,9 +20,13 @@ public class EventGoal extends Event {
     public EventGoal() {
         super();
     }
+
+    public EventGoal(Game game){
+        super(game);
+    }
     
-    public EventGoal(Date time, Player player, Team team) {
-        super(time);
+    public EventGoal(Game game, Date time, Player player, Team team) {
+        super(game, time);
         this.player = player;
         this.team = team;
     }

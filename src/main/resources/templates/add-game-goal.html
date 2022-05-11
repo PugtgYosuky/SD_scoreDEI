@@ -1,0 +1,27 @@
+<form th:action="@{/admin/create-game-goal}" th:object="${event}" method="post">
+    <div class="form-row">
+        <div>
+            <label>Game</label>
+            <select th:field="*{game}">
+                <option th:each="g : ${games}" th:value="${g.id}" th:text="${g.teamA} ${g.teamB}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Time</label>
+            <input type="datetime-local" th:field="*{time}" placeholder="Date"/>
+        </div>
+        <div>
+            <label>Player</label>
+            <select th:field="*{player}">
+                <option th:each="p : ${players}" th:value="${p.id}" th:text="${p.name}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Team</label>
+            <select th:field="*{team}">
+                <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
+            </select>
+        </div>
+        <button type="submit">Create Event</button>
+    </div>
+</form>

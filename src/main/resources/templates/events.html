@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Game list</title>
+        <meta charset="utf8"/>
+    </head>
+
+    <body>
+        <h1>Games</h1>
+        <div th:each="e : ${events}">
+            <p th:text="${e.time}"></p>
+        </div>
+    </body>
+</html>
