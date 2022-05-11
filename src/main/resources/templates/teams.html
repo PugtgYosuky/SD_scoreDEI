@@ -13,7 +13,7 @@
             </tr>
             <tr th:each="t : ${teams}">
                 <td th:text="${t.name}">teamName</td>
-                <img th:src="${t.imageURL}" />
+                <img width="100px" height="100px" th:src="${t.imageURL}" />
             </tr>
         </table>
     </body>

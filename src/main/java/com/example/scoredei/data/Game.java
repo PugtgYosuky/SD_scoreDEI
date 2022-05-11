@@ -1,5 +1,7 @@
 package com.example.scoredei.data;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public class Game {
     @ManyToOne
     private Team teamB;
     private String location;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date start;
     @OneToMany
     private List<Event> events;

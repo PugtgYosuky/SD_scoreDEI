@@ -1,6 +1,7 @@
 package com.example.scoredei.data;
 
 import com.example.scoredei.data.types.PlayerType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,6 +13,7 @@ public class Player {
     @Id @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
     private String name;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date birthDate;
     private PlayerType position;
     @ManyToOne

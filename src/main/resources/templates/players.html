@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player list</title>
+    <meta charset="utf8"/>
+</head>
+
+<body>
+<h1>List</h1>
+<table>
+    <tr>
+        <th>Name</th>
+    </tr>
+    <tr th:each="p : ${players}">
+        <td th:text="${p.name}">playerName</td>
+        <td th:text="${p.birthDate}">playerBirthday</td>
+        <td th:text="${p.position}">playerPosition</td>
+        <td th:text="${p.team.name}">teamName</td>
+        <img width="100px" height="100px" th:src="${p.team.imageURL}" />
+    </tr>
+</table>
+</body>
+</html>

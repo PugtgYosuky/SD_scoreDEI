@@ -1,0 +1,25 @@
+<form th:action="@{/admin/create-player}" th:object="${player}" method="post">
+    <div class="form-row">
+        <div>
+            <label>Name</label>
+            <input type="text" th:field="*{name}" placeholder="Name"/>
+        </div>
+        <div>
+            <label>Birthday</label>
+            <input type="date" th:field="*{birthDate}" placeholder="Birthday"/>
+        </div>
+        <div>
+            <label>Position</label>
+            <select th:field="*{position}">
+                <option th:each="pos : ${T(com.example.scoredei.data.types.PlayerType).values()}" th:value="${pos}" th:text="${pos}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Team</label>
+            <select th:field="*{team}">
+                <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
+            </select>
+        </div>
+        <button type="submit">Create Player</button>
+    </div>
+</form>

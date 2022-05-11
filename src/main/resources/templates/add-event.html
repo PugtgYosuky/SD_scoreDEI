@@ -1,0 +1,25 @@
+<form th:action="@{/admin/create-event}" th:object="${game}" method="post">
+    <div class="form-row">
+        <div>
+            <label>Team A</label>
+            <select th:field="*{teamA}">
+                <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Team B</label>
+            <select th:field="*{teamB}">
+                <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Location</label>
+            <input type="text" th:field="*{location}" placeholder="Location"/>
+        </div>
+        <div>
+            <label>Date</label>
+            <input type="datetime-local" th:field="*{start}" placeholder="Date"/>
+        </div>
+        <button type="submit">Create Game</button>
+    </div>
+</form>

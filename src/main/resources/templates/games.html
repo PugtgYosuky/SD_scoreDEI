@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Game list</title>
+        <meta charset="utf8"/>
+    </head>
+
+    <body>
+        <h1>Games</h1>
+        <div th:each="g : ${games}">
+            <div>
+                <td th:text="${g.teamA.name}">teamAName</td>
+                <img width="100px" height="100px" th:src="${g.teamA.imageURL}" />
+            </div>
+            <div>
+                <td th:text="${g.teamB.name}">teamBName</td>
+                <img width="100px" height="100px" th:src="${g.teamB.imageURL}" />
+            </div>
+            <div>
+                <p th:text="${g.location}"></p>
+                <p th:text="${g.start}"></p>
+            </div>
+            <div th:each="e : ${g.events}">
+                <p th:text="${g.time}"></p>
+            </div>
+        </div>
+    </body>
+</html>

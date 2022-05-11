@@ -1,5 +1,6 @@
 package com.example.scoredei.services;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import com.example.scoredei.data.Event;
@@ -18,7 +19,7 @@ public class EventService {
         eventRepository.save(event);
     }
 
-    public List<Event> getAllEvents() {
+    public List<Event> getAllEvents() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         List<Event> events = new ArrayList<>();
         eventRepository.findAll().forEach(events::add);
         return events;

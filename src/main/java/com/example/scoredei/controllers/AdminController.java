@@ -58,6 +58,7 @@ public class AdminController {
     @GetMapping("/add-game")
     public String addGame(Model model) {
         model.addAttribute("game", new Game());
+        model.addAttribute("teams", this.teamService.getTeams());
         return "add-game";
     }
 
@@ -70,6 +71,7 @@ public class AdminController {
     @GetMapping("/add-player")
     public String addPlayer(Model model) {
         model.addAttribute("player", new Player());
+        model.addAttribute("teams", this.teamService.getTeams());
         return "add-player";
     }
 
