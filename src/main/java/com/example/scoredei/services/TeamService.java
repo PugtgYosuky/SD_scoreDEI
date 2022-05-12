@@ -24,4 +24,7 @@ public class TeamService {
         return teams;
     }
 
+    public Optional<Team> getTeam(int id) {
+        return teamRepository.findById(id);
+    }
 }

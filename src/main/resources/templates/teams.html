@@ -7,14 +7,10 @@
 
     <body>
         <h1>List</h1>
-        <table>
-            <tr>
-                <th>Name</th>
-            </tr>
-            <tr th:each="t : ${teams}">
-                <td th:text="${t.name}">teamName</td>
-                <img width="100px" height="100px" th:src="${t.imageURL}" />
-            </tr>
-        </table>
+        <div th:each="t : ${teams}">
+            <td th:text="${t.name}">teamName</td>
+            <img width="100px" height="100px" th:src="${t.imageURL}" />
+            <a th:href="@{admin/edit-team(id=${t.id})}">Edit</a>
+        </div>
     </body>
 </html>
