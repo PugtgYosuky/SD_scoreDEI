@@ -24,4 +24,15 @@ public class PlayerService {
         return players;
     }
 
+    public Optional<Player> getPlayer(int id) {
+        return this.playerRepository.findById(id);
+    }
+
+    public void deletePlayer(int id) {
+        this.playerRepository.deleteById(id);
+    }
+
+    public void deletePlayer(Player player) {
+        this.playerRepository.delete(player);
+    }
 }

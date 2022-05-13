@@ -17,6 +17,7 @@
         <td th:text="${p.position}">playerPosition</td>
         <td th:text="${p.team.name}">teamName</td>
         <img width="100px" height="100px" th:src="${p.team.imageURL}" />
+        <a th:href="@{admin/edit-player(id=${p.id})}">Edit</a>
     </tr>
 </table>
 </body>

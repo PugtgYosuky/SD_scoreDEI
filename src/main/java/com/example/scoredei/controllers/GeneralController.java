@@ -53,6 +53,11 @@ public class GeneralController {
         return "events";
     }
 
+    @GetMapping("/")
+    public String homePage(Model model) {
+        return "redirect:/games";
+    }
+
     //TODO: create endpoints to see a especific team, game, player, user, event
 
 

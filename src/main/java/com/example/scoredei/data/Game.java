@@ -60,6 +60,10 @@ public class Game {
         return events;
     }
 
+    public void setId(int id){
+        this.id = id;
+    }
+
     public void setTeamA(Team teamA) {
         this.teamA = teamA;
     }
@@ -79,5 +83,6 @@ public class Game {
     public void addEvent(Event event) {
         this.events.add(event);
     }
+
 
 }

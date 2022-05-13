@@ -40,37 +40,37 @@ public class UserController {
 
     @GetMapping("/redirect-game-end")
     public String redirectGameEnd(Model model){
-        return "redirect:/admin/add-game-end";
+        return "redirect:/add-game-end";
     }
 
     @GetMapping("/redirect-game-goal")
     public String redirectGameGoal(Model model){
-        return "redirect:/admin/add-game-start";
+        return "redirect:/add-game-start";
     }
 
     @GetMapping("/redirect-game-interrupt")
     public String redirectGameInterrupt(Model model){
-        return "redirect:/admin/add-game-interrupt";
+        return "redirect:/add-game-interrupt";
     }
 
     @GetMapping("/redirect-game-red-card")
     public String redirectGameRedCard(Model model){
-        return "redirect:/admin/add-game-red-card";
+        return "redirect:/add-game-red-card";
     }
 
     @GetMapping("/redirect-game-resume")
     public String redirectGameResume(Model model){
-        return "redirect:/admin/add-game-resume";
+        return "redirect:/add-game-resume";
     }
 
     @GetMapping("/redirect-game-start")
     public String redirectGameStart(Model model){
-        return "redirect:/admin/add-game-start";
+        return "redirect:/add-game-start";
     }
 
     @GetMapping("/redirect-game-yellow-card")
     public String redirectGameYellowCard(Model model){
-        return "redirect:/admin/add-game-yellow-card";
+        return "redirect:/add-game-yellow-card";
     }
 
     @GetMapping("/add-event")
@@ -88,7 +88,7 @@ public class UserController {
     @PostMapping("/create-game-start")
     public String createGameStart(@ModelAttribute EventStart event){
         this.eventService.addEvent(event);
-        return "redirect:/admin/events";
+        return "redirect:/events";
     }
 
     @GetMapping("/add-game-end")
@@ -101,7 +101,7 @@ public class UserController {
     @PostMapping("/create-game-end")
     public String createGameEnd(@ModelAttribute EventEnd event){
         this.eventService.addEvent(event);
-        return "redirect:/admin/events";
+        return "redirect:/events";
     }
 
     @GetMapping("/add-game-goal")
@@ -116,7 +116,7 @@ public class UserController {
     @PostMapping("/create-game-goal")
     public String createGameGoal(@ModelAttribute EventGoal event){
         this.eventService.addEvent(event);
-        return "redirect:/admin/events";
+        return "redirect:/events";
     }
 
     @GetMapping("/add-game-interrupt")
@@ -129,7 +129,7 @@ public class UserController {
     @PostMapping("/create-game-interrupt")
     public String createGameInterrupt(@ModelAttribute EventInterrupt event){
         this.eventService.addEvent(event);
-        return "redirect:/admin/events";
+        return "redirect:/events";
     }
 
     @GetMapping("/add-game-red-card")
@@ -143,7 +143,7 @@ public class UserController {
     @PostMapping("/create-game-red-card")
     public String createGameRedCard(@ModelAttribute EventRedCard event){
         this.eventService.addEvent(event);       
-        return "redirect:/admin/events";
+        return "redirect:/events";
     }
 
     @GetMapping("/add-game-resume")
@@ -156,7 +156,7 @@ public class UserController {
     @PostMapping("/create-game-resume")
     public String createGameResume(@ModelAttribute EventResume event){
         this.eventService.addEvent(event);
-        return "redirect:/admin/events";
+        return "redirect:/events";
     }
 
     @GetMapping("/add-game-yellow-card")
@@ -170,7 +170,7 @@ public class UserController {
     @PostMapping("/create-game-yellow-card")
     public String createGameYellowCard(@ModelAttribute EventYellowCard event){
         this.eventService.addEvent(event);
-        return "redirect:/admin/events";
+        return "redirect:/events";
     }
 
 }

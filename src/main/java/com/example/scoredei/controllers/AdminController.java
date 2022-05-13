@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -106,6 +105,60 @@ public class AdminController {
     @PostMapping("/save-edit-team")
     public String saveEditTeam(@ModelAttribute Team team) {
         this.teamService.addTeam(team);
+        return "redirect:/teams";
+    }
+
+    @GetMapping ("/edit-player")
+    public String editPlayer(Model model, @RequestParam(name="id", required=true) int id){
+        Optional<Player> player = this.playerService.getPlayer(id);
+        if(player.isPresent()) {
+            model.addAttribute("player", player.get());
+            model.addAttribute("teams", this.teamService.getTeams());
+            return "edit-player";
+        } else {
+            return "redirect:/players";
+        }
+    }
+
+    @PostMapping("/save-edit-player")
+    public String saveEditPlayer(@ModelAttribute Player player) {
+        this.playerService.addPlayer(player);
+        return "redirect:/players";
+    }
+
+    @GetMapping("/edit-game")
+    public String editGame(Model model, @RequestParam(name="id", required=true) int id) {
+        Optional<Game> game = this.gameService.getGame(id);
+        if(game.isPresent()) {
+            model.addAttribute("game", game.get());
+            model.addAttribute("teams", this.teamService.getTeams());
+            return "edit-game";
+        } else {
+            return "redirect:/games";
+        }
+    }
+
+    @PostMapping("/save-edit-game")
+    public String saveEditGame(@ModelAttribute Game game) {
+        this.gameService.addGame(game);
+        return "redirect:/games";
+    }
+
+    @PostMapping("/delete-game")
+    public String deleteGame(@RequestParam(name="id", required=true) int id) {
+        this.gameService.deleteGame(id);
+        return "redirect:/games";
+    }
+
+    @PostMapping("/delete-player")
+    public String deletePlayer(@RequestParam(name="id", required=true) int id) {
+        this.playerService.deletePlayer(id);
+        return "redirect:/players";
+    }
+
+    @PostMapping("/delete-team")
+    public String deleteTeam(@RequestParam(name="id", required=true) int id) {
+        this.teamService.deleteTeam(id);
         return "redirect:/teams";
     }
 

@@ -23,6 +23,10 @@
             <div th:each="g : ${g.events}">
                 <p th:text="${g.time}"></p>
             </div>
+            <a th:href="@{admin/edit-game(id=${g.id})}">Edit</a>
+            <form th:method="post" th:action="@{/admin/delete-game(id=${g.id})}">
+                <input type="submit" value="Delete"/>
+            </form>
         </div>
     </body>
 </html>

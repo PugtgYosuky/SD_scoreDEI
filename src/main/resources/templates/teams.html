@@ -11,6 +11,9 @@
             <td th:text="${t.name}">teamName</td>
             <img width="100px" height="100px" th:src="${t.imageURL}" />
             <a th:href="@{admin/edit-team(id=${t.id})}">Edit</a>
+            <form th:method="post" th:action="@{/admin/delete-team(id=${t.id})}">
+                <input type="submit" value="Delete"/>
+            </form>
         </div>
     </body>
 </html>

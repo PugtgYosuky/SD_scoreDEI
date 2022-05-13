@@ -3,7 +3,7 @@
         <div>
             <label>Game</label>
             <select th:field="*{game}">
-                <option th:each="g : ${games}" th:value="${g.id}" th:text="${g.teamA} ${g.teamB}"></option>
+                <option th:each="g : ${games}" th:value="${g.id}" th:text="${g.teamA.name + ' ' + g.teamB.name}"></option>
             </select>
         </div>
         <div>

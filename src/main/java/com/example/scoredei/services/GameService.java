@@ -23,4 +23,12 @@ public class GameService {
         gameRepository.findAll().forEach(games::add);
         return games;
     }
+
+    public Optional<Game> getGame(int id) {
+        return this.gameRepository.findById(id);
+    }
+
+    public void deleteGame(int id) {
+        this.gameRepository.deleteById(id);
+    }
 }

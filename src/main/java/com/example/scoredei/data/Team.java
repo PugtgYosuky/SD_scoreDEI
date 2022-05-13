@@ -50,6 +50,14 @@ public class Team {
         this.imageURL = imageURL;
     }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
     @Override
     public String toString() {
         return "Team{" + "id=" + id + ", name=" + name + ", imageURL=" + imageURL + '}';
