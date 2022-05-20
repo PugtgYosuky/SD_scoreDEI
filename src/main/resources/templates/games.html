@@ -9,12 +9,12 @@
         <h1>Games</h1>
         <div th:each="g : ${games}">
             <div>
-                <td th:text="${g.teamA.name}">teamAName</td>
-                <img width="100px" height="100px" th:src="${g.teamA.imageURL}" />
+                <td th:text="${g.getTeamA().name}">teamAName</td>
+                <img width="100px" height="100px" th:src="${g.getTeamA().imageURL}" />
             </div>
             <div>
-                <td th:text="${g.teamB.name}">teamBName</td>
-                <img width="100px" height="100px" th:src="${g.teamB.imageURL}" />
+                <td th:text="${g.getTeamB().name}">teamBName</td>
+                <img width="100px" height="100px" th:src="${g.getTeamB().imageURL}" />
             </div>
             <div>
                 <p th:text="${g.location}"></p>

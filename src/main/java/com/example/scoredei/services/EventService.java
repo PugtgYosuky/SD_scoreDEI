@@ -23,4 +23,8 @@ public class EventService {
         eventRepository.findAll().forEach(events::add);
         return events;
     }
+
+    public void deleteEvent(Event event){
+        this.eventRepository.delete(event);
+    }
 }

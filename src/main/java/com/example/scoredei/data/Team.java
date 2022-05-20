@@ -16,6 +16,8 @@ public class Team {
     private String imageURL;
     @OneToMany(mappedBy="team")
     private List<Player> players;
+    @ManyToMany
+    private List<Game> games;
 
     public Team() {
     }
@@ -24,6 +26,7 @@ public class Team {
         this.name = name;
         this.imageURL = imageURL;
         this.players = new ArrayList<>();
+        this.games = new ArrayList<>();
     }
 
     public int getId() {
@@ -56,6 +59,14 @@ public class Team {
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public List<Game> getGames() {
+        return games;
+    }
+
+    public void setGames(List<Game> games) {
+        this.games = games;
     }
 
     @Override

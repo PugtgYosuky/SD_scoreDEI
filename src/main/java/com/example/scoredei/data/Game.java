@@ -14,10 +14,8 @@ public class Game {
 
     @Id @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
-    @ManyToOne
-    private Team teamA;
-    @ManyToOne
-    private Team teamB;
+    @ManyToMany
+    private List<Team> teams;
     private String location;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date start;
@@ -29,11 +27,16 @@ public class Game {
     }
 
     public Game(Team teamA, Team teamB, String location, Date start) {
-        this.teamA = teamA;
-        this.teamB = teamB;
+        this.teams = new ArrayList<>();
+        this.teams.add(teamA);
+        this.teams.add(teamB);
         this.location = location;
         this.start = start;
         this.events = new ArrayList<>();
+    }
+
+    public void addTeam(Team team) {
+        teams.add(team);
     }
 
     public int getId() {
@@ -41,11 +44,11 @@ public class Game {
     }
 
     public Team getTeamA() {
-        return teamA;
+        return teams.get(0);
     }
 
     public Team getTeamB() {
-        return teamB;
+        return teams.get(1);
     }
 
     public String getLocation() {
@@ -65,11 +68,11 @@ public class Game {
     }
 
     public void setTeamA(Team teamA) {
-        this.teamA = teamA;
+        this.teams.set(0, teamA);
     }
 
     public void setTeamB(Team teamB) {
-        this.teamB = teamB;
+        this.teams.set(1, teamB);
     }
 
     public void setLocation(String location) {

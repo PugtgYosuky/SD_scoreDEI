@@ -26,5 +26,18 @@ public class UserService {
     public User getUser(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public boolean deleteUser(int id){
+        Optional<User> u = userRepository.findById(id);
+        if(!u.isPresent()) {
+            return false;
+        }
+        try {
+            userRepository.deleteById(id);
+        } catch ( IllegalArgumentException e) {
+            return false;
+        }
+        return true;
+    }
     
 }

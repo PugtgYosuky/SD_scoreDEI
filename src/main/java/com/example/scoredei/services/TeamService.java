@@ -2,6 +2,7 @@ package com.example.scoredei.services;
 
 import java.util.*;
 
+import com.example.scoredei.data.Game;
 import com.example.scoredei.data.Player;
 import com.example.scoredei.data.Team;
 import com.example.scoredei.repositories.TeamRepository;
@@ -15,7 +16,11 @@ public class TeamService {
     @Autowired
     private TeamRepository teamRepository;
 
-    @Autowired PlayerService playerService;
+    @Autowired 
+    private PlayerService playerService;
+
+    @Autowired
+    private GameService gameService;
 
     public void addTeam(Team team) {
         teamRepository.save(team);
@@ -32,11 +37,18 @@ public class TeamService {
     }
 
     public void deleteTeam(int id) {
-        Optional<Team> team = teamRepository.findById(id);
-        if(team.isPresent()) {
-            for (Player player : team.get().getPlayers()) {
+        Optional<Team> t = teamRepository.findById(id);
+        if(t.isPresent()) {
+            Team team = t.get();
+            for (Player player : team.getPlayers()) {
                 playerService.deletePlayer(player);
             }
+
+            for (Game game : team.getGames()) {
+                gameService.deleteGame(game);
+            }
+
         }
+        this.teamRepository.deleteById(id);
     }
 }

@@ -6,6 +6,7 @@ import com.example.scoredei.data.Game;
 import com.example.scoredei.data.Player;
 import com.example.scoredei.data.Team;
 import com.example.scoredei.data.User;
+import com.example.scoredei.data.forms.GameForm;
 import com.example.scoredei.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,14 +62,16 @@ public class AdminController {
 
     @GetMapping("/add-game")
     public String addGame(Model model) {
-        model.addAttribute("game", new Game());
+        model.addAttribute("gameForm", new GameForm());
         model.addAttribute("teams", this.teamService.getTeams());
         return "add-game";
     }
 
     @PostMapping("/create-game")
-    public String createGame(@ModelAttribute Game game) {
-        this.gameService.addGame(game);
+    public String createGame(@ModelAttribute GameForm gameForm) {
+        gameForm.getGame().addTeam(gameForm.getTeamA());
+        gameForm.getGame().addTeam(gameForm.getTeamB());
+        this.gameService.addGame(gameForm.getGame());
         return "redirect:/games";
     }
 
@@ -130,7 +133,7 @@ public class AdminController {
     public String editGame(Model model, @RequestParam(name="id", required=true) int id) {
         Optional<Game> game = this.gameService.getGame(id);
         if(game.isPresent()) {
-            model.addAttribute("game", game.get());
+            model.addAttribute("game", new GameForm(game.get()));
             model.addAttribute("teams", this.teamService.getTeams());
             return "edit-game";
         } else {
@@ -139,8 +142,10 @@ public class AdminController {
     }
 
     @PostMapping("/save-edit-game")
-    public String saveEditGame(@ModelAttribute Game game) {
-        this.gameService.addGame(game);
+    public String saveEditGame(@ModelAttribute GameForm gameForm) {
+        gameForm.getGame().setTeamA(gameForm.getTeamA());
+        gameForm.getGame().setTeamB(gameForm.getTeamB());
+        this.gameService.addGame(gameForm.getGame());
         return "redirect:/games";
     }
 
@@ -161,5 +166,13 @@ public class AdminController {
         this.teamService.deleteTeam(id);
         return "redirect:/teams";
     }
+
+    @PostMapping("/delete-user")
+    public String deleteUser(@RequestParam(name="id", required=true) int id) {
+        this.userService.deleteUser(id);
+        return "redirect:/admin/users";
+    }
+
+
 
 }
