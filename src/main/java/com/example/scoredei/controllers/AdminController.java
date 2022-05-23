@@ -133,7 +133,7 @@ public class AdminController {
     public String editGame(Model model, @RequestParam(name="id", required=true) int id) {
         Optional<Game> game = this.gameService.getGame(id);
         if(game.isPresent()) {
-            model.addAttribute("game", new GameForm(game.get()));
+            model.addAttribute("gameForm", new GameForm(game.get()));
             model.addAttribute("teams", this.teamService.getTeams());
             return "edit-game";
         } else {
@@ -172,7 +172,4 @@ public class AdminController {
         this.userService.deleteUser(id);
         return "redirect:/admin/users";
     }
-
-
-
 }

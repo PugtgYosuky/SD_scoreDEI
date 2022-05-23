@@ -10,7 +10,8 @@ import java.util.Date;
 @XmlRootElement
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Event {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date time;

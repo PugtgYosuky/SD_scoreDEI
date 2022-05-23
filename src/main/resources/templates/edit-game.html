@@ -1,26 +1,28 @@
 <form th:action="@{/admin/save-edit-game}" th:object="${gameForm}" method="post">
     <div class="form-row">
-        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{game.id}">
+        <input type="hidden" th:field="*{game.teams}">
+        <input type="hidden" th:field="*{game.events}">
         <div>
             <label>Team A</label>
-            <select th:field="*{gameForm.teamA}">
+            <select th:field="*{teamA}">
                 <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
             </select>
         </div>
         <div>
             <label>Team B</label>
-            <select th:field="*{gameForm.teamB}">
+            <select th:field="*{teamB}">
                 <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
             </select>
         </div>
         <div>
             <label>Location</label>
-            <input type="text" th:field="*{gameForm.game.location}"/>
+            <input type="text" th:field="*{game.location}" placeholder="Location"/>
         </div>
         <div>
             <label>Date</label>
-            <input type="datetime-local" th:field="*{gameForm.game.start}"/>
-        </div> 
+            <input type="datetime-local" th:field="*{game.start}" placeholder="Date"/>
+        </div>
         <button type="submit">Save Game</button>
     </div>
 </form>

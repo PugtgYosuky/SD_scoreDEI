@@ -23,7 +23,9 @@ public class Game {
     private List<Event> events;
 
     public Game() {
-
+        this.teams = new ArrayList<>();
+        this.events = new ArrayList<>();
+        
     }
 
     public Game(Team teamA, Team teamB, String location, Date start) {
@@ -51,6 +53,14 @@ public class Game {
         return teams.get(1);
     }
 
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<Team> teams){
+        this.teams = teams;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -61,6 +71,10 @@ public class Game {
 
     public List<Event> getEvents() {
         return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
     public void setId(int id){
@@ -86,6 +100,5 @@ public class Game {
     public void addEvent(Event event) {
         this.events.add(event);
     }
-
 
 }
