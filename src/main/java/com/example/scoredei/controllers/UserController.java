@@ -45,7 +45,7 @@ public class UserController {
 
     @GetMapping("/redirect-game-goal")
     public String redirectGameGoal(Model model){
-        return "redirect:/add-game-start";
+        return "redirect:/add-game-goal";
     }
 
     @GetMapping("/redirect-game-interrupt")

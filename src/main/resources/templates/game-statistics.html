@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Game list</title>
+        <meta charset="utf8"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    </head>
+
+    <body>
+        <table class="table">
+            <thead>
+                <tr>
+                  <th scope="col">Team</th>
+                  <th scope="col">🟨 Cards</th>
+                  <th scope="col">🟥 Cards</th>
+                  <th scope="col">⚽ Goals</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <th scope="row" th:text="${game.getTeamA().getName()}">teamAName</th>
+                    <td th:text="${teamAYellowCards.size()}">teamAYCards</td>
+                    <td th:text="${teamARedCards.size()}">teamARCards</td>
+                    <td th:text="${teamAGoals.size()}">teamAGoals</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" th:text="${game.getTeamB().getName()}">teamBName</th>
+                    <td th:text="${teamBYellowCards.size()}">teamBYCards</td>
+                    <td th:text="${teamBRedCards.size()}">teamBRCards</td>
+                    <td th:text="${teamBGoals.size()}">teamBGoals</td>
+                </tr>
+              </tbody>
+        </table>
+        
+        <a class="btn btn-primary" role="button" href="/games">Back</a>
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    </body>
+</html>

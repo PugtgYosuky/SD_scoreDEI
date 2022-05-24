@@ -18,6 +18,8 @@ public class GameService {
     @Autowired
     private EventService eventService;
 
+
+
     public void addGame(Game game) {
         gameRepository.save(game);
     }
@@ -46,4 +48,6 @@ public class GameService {
     public void deleteGame(Game game) {
         this.deleteGame(game.getId());
     }
+
+
 }

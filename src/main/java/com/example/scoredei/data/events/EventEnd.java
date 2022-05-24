@@ -2,6 +2,7 @@ package com.example.scoredei.data.events;
 
 import com.example.scoredei.data.Event;
 import com.example.scoredei.data.Game;
+import com.example.scoredei.data.types.EventType;
 
 import javax.persistence.Entity;
 import java.util.Date;
@@ -10,15 +11,15 @@ import java.util.Date;
 public class EventEnd extends Event {
 
     public EventEnd() {
-        super();
+        super(EventType.END);
     }
 
     public EventEnd(Game game){
-        super(game);
+        super(EventType.END, game);
     }
     
     public EventEnd(Game game, Date time) {
-        super(game, time);
+        super(EventType.END, game, time);
     }
 
 }

@@ -4,6 +4,7 @@ import com.example.scoredei.data.Event;
 import com.example.scoredei.data.Game;
 import com.example.scoredei.data.Player;
 import com.example.scoredei.data.Team;
+import com.example.scoredei.data.types.EventType;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -18,15 +19,15 @@ public class EventGoal extends Event {
     private Team team;
 
     public EventGoal() {
-        super();
+        super(EventType.GOAL);
     }
 
     public EventGoal(Game game){
-        super(game);
+        super(EventType.GOAL,game);
     }
     
     public EventGoal(Game game, Date time, Player player, Team team) {
-        super(game, time);
+        super(EventType.GOAL, game, time);
         this.player = player;
         this.team = team;
     }

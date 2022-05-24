@@ -1,5 +1,6 @@
 package com.example.scoredei.data;
 
+import com.example.scoredei.data.types.EventType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -18,14 +19,19 @@ public class Event {
     @ManyToOne
     private Game game;
 
-    public Event() {
+    private EventType type;
 
+    public Event(EventType type) {
+        this.type = type;
     }
-    public Event(Game game){
+    
+    public Event(EventType type, Game game){
+        this.type = type;
         this.game = game;
     }
     
-    public Event(Game game, Date time){
+    public Event(EventType type, Game game, Date time){
+        this.type = type;
         this.game = game;
         this.time = time;
     }
@@ -52,5 +58,13 @@ public class Event {
 
     public void setGame(Game game){
         this.game = game;
+    }
+
+    public EventType getType(){
+        return this.type;
+    }
+
+    public void setType(EventType type){
+        this.type = type;
     }
 }
