@@ -1,6 +1,7 @@
 package com.example.scoredei.controllers;
 
 import com.example.scoredei.data.Game;
+import com.example.scoredei.data.Player;
 import com.example.scoredei.data.Team;
 import com.example.scoredei.data.statistics.GameStatistics;
 import com.example.scoredei.data.statistics.GeneralStatistics;
@@ -70,20 +71,50 @@ public class GeneralController {
 
     //TODO: create endpoints to see a especific team, game, player, user, event
 
+    @GetMapping("/game")
+    public String getGame(@RequestParam(name="id", required=true) int id, Model model) {
+        Optional<Game> g = this.gameService.getGame(id);
+        if(g.isPresent()){
+            model.addAttribute("game", g.get());
+            model.addAttribute("gameStatistics", new GameStatistics(g.get()));
+            return "game";
+        }
+        model.addAttribute("prev", "/games");
+        model.addAttribute("message", "Game not found");
+        return "404";
+    }
+
+    @GetMapping("/team")
+    public String getTeam(@RequestParam(name="id", required=true) int id, Model model) {
+        Optional<Team> t = this.teamService.getTeam(id);
+        if(t.isPresent()){
+            model.addAttribute("team", t.get());
+            return "team";
+        }
+        model.addAttribute("prev", "/teams");
+        model.addAttribute("message", "Team not found");
+        return "404";
+    }
+
+    @GetMapping("/player")
+    public String getPlayer(@RequestParam(name="id", required=true) int id, Model model) {
+        Optional<Player> player = this.playerService.getPlayer(id);
+        if(player.isPresent()){
+            model.addAttribute("player", player.get());
+            return "player";
+        }
+        model.addAttribute("prev", "/players");
+        model.addAttribute("message", "Player not found");
+        return "404";
+    }
+
     @GetMapping("/game-statistics")
     public String getGameStatistics(@RequestParam(name="id", required=true) int id, Model model) {
-        // TODO: REVER
         Optional<Game> g = this.gameService.getGame(id);
         if(g.isPresent()) {
             Game game = g.get();
             GameStatistics gameStatistics = new GameStatistics(game);
-            model.addAttribute("teamAGoals", gameStatistics.getTeamGoals(game.getTeamA()));
-            model.addAttribute("teamBGoals", gameStatistics.getTeamGoals(game.getTeamB()));
-            model.addAttribute("teamAYellowCards", gameStatistics.getTeamYellowCards(game.getTeamA()));
-            model.addAttribute("teamBYellowCards", gameStatistics.getTeamYellowCards(game.getTeamB()));
-            model.addAttribute("teamARedCards", gameStatistics.getTeamRedCards(game.getTeamA()));
-            model.addAttribute("teamBRedCards", gameStatistics.getTeamRedCards(game.getTeamB()));
-            model.addAttribute("interrupts", gameStatistics.getInterrupts());
+            model.addAttribute("gameStatistics", gameStatistics);
             model.addAttribute("game", game);
             return "game-statistics";
         }
@@ -95,10 +126,12 @@ public class GeneralController {
         GeneralStatistics generalStatistics = new GeneralStatistics(gameService, teamService);
 
         List<Team> teams = this.teamService.getTeams();
-        teams.sort(Comparator.comparingInt(generalStatistics::getTeamPoints));
+        teams.sort(Comparator.comparingInt(generalStatistics::getTeamPoints).reversed());
 
         model.addAttribute("teams", teams);
-        model.addAttribute("gameStatistics", generalStatistics);
+        model.addAttribute("generalStatistics", generalStatistics);
+
+        //TODO: ver o melhor marcador do campeonato :)
 
         return "statistics";
     }

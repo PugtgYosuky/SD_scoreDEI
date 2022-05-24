@@ -24,10 +24,10 @@
             <div th:each="g : ${g.events}">
                 <p th:text="${g.time}"></p>
             </div>
-            <a th:href="@{admin/edit-game(id=${g.id})}">Edit</a>
-            <a class="btn btn-primary" role="button" th:href="@{game-statistics(id=${g.id})}">Statistics</a>
+            <a class="btn btn-warning" th:href="@{admin/edit-game(id=${g.id})}">Edit</a>
+            <a class="btn btn-primary" role="button" th:href="@{game(id=${g.id})}">Details</a>
             <form th:method="post" th:action="@{/admin/delete-game(id=${g.id})}">
-                <input type="submit" value="Delete"/>
+                <input class="btn btn-danger" type="submit" value="Delete"/>
             </form>
         </div>
 

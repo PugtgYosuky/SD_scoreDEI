@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Player</title>
+        <meta charset="utf8"/>
+    </head>
+    <body>
+        <h1 th:text="${player.name}"></h1>
+        <h2 th:text="${player.birthDate}"></h2>
+        <h2 th:text="${player.position}"></h2>
+        <a th:text="${'Team: ' + player.team}" th:href="@{team(id=${player.team.id})}"></a>
+        <!--- TODO: adicionar golos e cartoes -->
+        
+    </body>
+</html>

@@ -22,16 +22,16 @@
                 </tr>
             </thead>
                 <tbody>
-                    <tr th:each="team : ${teams}">
-                        <th scope="row">1</th>
+                    <tr th:each="team,index : ${teams}">
+                        <th scope="row" th:text="${index.index + 1}"></th>
                         <th th:text="${team.name}"></th>
                         <th th:text="${generalStatistics.getTeamPoints(team)}"></th>
-                        <!--<th th:text="${generalStatistics.getWins(team)}"></th>
+                        <th th:text="${generalStatistics.getWins(team)}"></th>
                         <th th:text="${generalStatistics.getDraws(team)}"></th>
                         <th th:text="${generalStatistics.getDefeats(team)}"></th>
                         <th th:text="${generalStatistics.getGoalsScored(team)}"></th>
                         <th th:text="${generalStatistics.getGoalsConceded(team)}"></th>
-                        <th th:text="${generalStatistics.getNumberOfGames(team)}"></th>-->
+                        <th th:text="${generalStatistics.getNumberOfGames(team)}"></th>
                     </tr>
                 </tbody>
         </table>

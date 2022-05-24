@@ -19,15 +19,15 @@
               <tbody>
                   <tr>
                     <th scope="row" th:text="${game.getTeamA().getName()}">teamAName</th>
-                    <td th:text="${teamAYellowCards.size()}">teamAYCards</td>
-                    <td th:text="${teamARedCards.size()}">teamARCards</td>
-                    <td th:text="${teamAGoals.size()}">teamAGoals</td>
+                    <td th:text="${gameStatistics.getTeamYellowCards(game.getTeamA()).size()}">teamAYCards</td>
+                    <td th:text="${gameStatistics.getTeamRedCards(game.getTeamA()).size()}">teamARCards</td>
+                    <td th:text="${gameStatistics.getTeamGoals(game.getTeamA()).size()}">teamAGoals</td>
                   </tr>
                   <tr>
                     <th scope="row" th:text="${game.getTeamB().getName()}">teamBName</th>
-                    <td th:text="${teamBYellowCards.size()}">teamBYCards</td>
-                    <td th:text="${teamBRedCards.size()}">teamBRCards</td>
-                    <td th:text="${teamBGoals.size()}">teamBGoals</td>
+                    <td th:text="${gameStatistics.getTeamYellowCards(game.getTeamB()).size()}">teamBYCards</td>
+                    <td th:text="${gameStatistics.getTeamRedCards(game.getTeamB()).size()}">teamBRCards</td>
+                    <td th:text="${gameStatistics.getTeamGoals(game.getTeamB()).size()}">teamBGoals</td>
                 </tr>
               </tbody>
         </table>
