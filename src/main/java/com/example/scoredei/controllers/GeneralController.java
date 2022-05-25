@@ -130,6 +130,7 @@ public class GeneralController {
 
         model.addAttribute("teams", teams);
         model.addAttribute("generalStatistics", generalStatistics);
+        model.addAttribute("bestScorer", )
 
         //TODO: ver o melhor marcador do campeonato :)
 

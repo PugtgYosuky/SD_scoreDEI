@@ -24,7 +24,12 @@ public class EventService {
         return events;
     }
 
-    public void deleteEvent(Event event){
-        this.eventRepository.delete(event);
+    public boolean deleteEvent(Event event){
+        try {
+            this.eventRepository.delete(event);
+            return true;
+        } catch (IllegalArgumentException exception) {
+            return false;
+        }
     }
 }

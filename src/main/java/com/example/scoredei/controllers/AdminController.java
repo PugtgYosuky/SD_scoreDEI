@@ -36,6 +36,8 @@ public class AdminController {
     @Autowired
     EventService eventService;
 
+    // *********************** ADD METHODS ***********************
+
     @GetMapping("/add-user")
     public String addUser(Model model) {
         model.addAttribute("user", new User());
@@ -88,6 +90,8 @@ public class AdminController {
         return "redirect:/players";
     }
 
+    // *********************** GET USERS ***********************
+
     @GetMapping("/users")
     public String getUsers(Model model) {
         model.addAttribute("users", this.userService.getUsers());
@@ -106,6 +110,8 @@ public class AdminController {
             return "404";
         }
     }
+
+    // *********************** EDIT METHODS ***********************
 
     @GetMapping("/edit-team")
     public String editTeam(Model model, @RequestParam(name="id", required=true) int id) {
@@ -143,7 +149,7 @@ public class AdminController {
     }
 
     @GetMapping("/edit-game")
-    public String editGame(Model model, @RequestParam(name="id", required=true) int id) {
+    public String editGame(@RequestParam(name="id", required=true) int id, Model model) {
         Optional<Game> game = this.gameService.getGame(id);
         if(game.isPresent()) {
             model.addAttribute("gameForm", new GameForm(game.get()));
@@ -162,27 +168,60 @@ public class AdminController {
         return "redirect:/games";
     }
 
+    @GetMapping("/edit-user")
+    public String editUser(@RequestParam(name="id", required=true) int id, Model model){
+        Optional<User> user = this.userService.getUser(id);
+        if(user.isPresent()) {
+            model.addAttribute("user", user.get());
+            return "edit-user";
+        }
+        model.addAttribute("prev", "/admin/users");
+        model.addAttribute("message", "User not found");
+        return "404";
+    }
+
+    @PostMapping("/save-edit-user")
+    public String saveEditUser(@ModelAttribute User user) {
+        this.userService.addUser(user);
+        return "redirect:/admin/users";
+    }
+
+    // *********************** DELETE METHODS ***********************
+
     @PostMapping("/delete-game")
-    public String deleteGame(@RequestParam(name="id", required=true) int id) {
-        this.gameService.deleteGame(id);
-        return "redirect:/games";
+    public String deleteGame(@RequestParam(name="id", required=true) int id, Model model) {
+        if(this.gameService.deleteGame(id))
+            return "redirect:/games";
+        model.addAttribute("prev", "/games");
+        model.addAttribute("message", "Game not found");
+        return "404";
     }
 
     @PostMapping("/delete-player")
-    public String deletePlayer(@RequestParam(name="id", required=true) int id) {
-        this.playerService.deletePlayer(id);
-        return "redirect:/players";
+    public String deletePlayer(@RequestParam(name="id", required=true) int id, Model model) {
+        if(this.playerService.deletePlayer(id))
+            return "redirect:/players";
+        model.addAttribute("prev", "/players");
+        model.addAttribute("message", "Player not found");
+        return "404";
     }
 
     @PostMapping("/delete-team")
-    public String deleteTeam(@RequestParam(name="id", required=true) int id) {
-        this.teamService.deleteTeam(id);
-        return "redirect:/teams";
+    public String deleteTeam(@RequestParam(name="id", required=true) int id, Model model) {
+        if(this.teamService.deleteTeam(id))
+            return "redirect:/teams";
+        model.addAttribute("prev", "/teams");
+        model.addAttribute("message", "Team not found");
+        return "404";
     }
 
     @PostMapping("/delete-user")
-    public String deleteUser(@RequestParam(name="id", required=true) int id) {
-        this.userService.deleteUser(id);
-        return "redirect:/admin/users";
+    public String deleteUser(@RequestParam(name="id", required=true) int id, Model model) {
+        if(this.userService.deleteUser(id))
+            return "redirect:/admin/users";
+        model.addAttribute("prev", "/admin/users");
+        model.addAttribute("message", "User not found");
+        return "404";
+
     }
 }

@@ -36,19 +36,23 @@ public class TeamService {
         return teamRepository.findById(id);
     }
 
-    public void deleteTeam(int id) {
+    public boolean deleteTeam(int id) {
         Optional<Team> t = teamRepository.findById(id);
-        if(t.isPresent()) {
-            Team team = t.get();
-            for (Player player : team.getPlayers()) {
-                playerService.deletePlayer(player);
-            }
-
-            for (Game game : team.getGames()) {
-                gameService.deleteGame(game);
-            }
-
+        if(!t.isPresent()) 
+            return false;
+        
+        Team team = t.get();
+        for (Player player : team.getPlayers()) 
+            playerService.deletePlayer(player);
+        
+        for (Game game : team.getGames()) 
+            gameService.deleteGame(game);
+        
+        try {
+            this.teamRepository.deleteById(id);
+        }catch ( IllegalArgumentException e) {
+            return false;
         }
-        this.teamRepository.deleteById(id);
+        return true;
     }
 }

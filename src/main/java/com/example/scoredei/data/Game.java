@@ -1,5 +1,8 @@
 package com.example.scoredei.data;
 
+import com.example.scoredei.data.events.EventRedCard;
+import com.example.scoredei.data.events.EventYellowCard;
+import com.example.scoredei.data.types.EventType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -99,6 +102,35 @@ public class Game {
 
     public void addEvent(Event event) {
         this.events.add(event);
+    }
+
+    public Event getLastEvent() {
+        if(this.events.size() == 0)
+            return null;
+        return this.events.get(this.events.size() - 1);
+    }
+
+    public int getYellowCards(Player player) {
+        int count = 0;
+        for(Event e : this.events) {
+            if(e.getType() == EventType.YELLOW_CARD) {
+                EventYellowCard event = (EventYellowCard) e;
+                if(event.getPlayer().equals(player))
+                    count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean hasRedCards(Player player) {
+        for(Event e : this.events) {
+            if(e.getType() == EventType.RED_CARD) {
+                EventRedCard event = (EventRedCard) e;
+                if(event.getPlayer().equals(player))
+                    return true;
+            }
+        }
+        return false;
     }
 
 }

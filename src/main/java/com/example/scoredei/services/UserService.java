@@ -27,6 +27,10 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public Optional<User> getUser(int id) {
+        return userRepository.findById(id);
+    }
+
     public boolean deleteUser(int id){
         Optional<User> u = userRepository.findById(id);
         if(!u.isPresent()) {

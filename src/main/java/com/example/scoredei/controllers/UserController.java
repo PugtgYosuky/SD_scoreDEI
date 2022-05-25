@@ -7,6 +7,7 @@ import com.example.scoredei.data.events.EventRedCard;
 import com.example.scoredei.data.events.EventResume;
 import com.example.scoredei.data.events.EventStart;
 import com.example.scoredei.data.events.EventYellowCard;
+import com.example.scoredei.data.types.EventType;
 import com.example.scoredei.services.EventService;
 import com.example.scoredei.services.GameService;
 import com.example.scoredei.services.PlayerService;
@@ -86,7 +87,11 @@ public class UserController {
     }
 
     @PostMapping("/create-game-start")
-    public String createGameStart(@ModelAttribute EventStart event){
+    public String createGameStart(@ModelAttribute EventStart event, Model model){
+        if(event.getGame().getEvents().size() != 0) {
+            model.addAttribute("prev", "/game?id=" + event.getGame().getId());
+            return "invalid-event";
+        }
         this.eventService.addEvent(event);
         return "redirect:/events";
     }
@@ -99,7 +104,15 @@ public class UserController {
     }
 
     @PostMapping("/create-game-end")
-    public String createGameEnd(@ModelAttribute EventEnd event){
+    public String createGameEnd(@ModelAttribute EventEnd event, Model model){
+
+        if( event.getGame().getEvents().size() == 0 ||
+            event.getGame().getLastEvent().getType() == EventType.END ||
+            event.getGame().getLastEvent().getType() == EventType.INTERRUPT) {
+            model.addAttribute("prev", "/game?id=" + event.getGame().getId());
+            return "invalid-event";    
+        }
+        // confirmar que já passara pelo menos 90 min e que o jogo não tinha terminado
         this.eventService.addEvent(event);
         return "redirect:/events";
     }
@@ -114,8 +127,15 @@ public class UserController {
     }
 
     @PostMapping("/create-game-goal")
-    public String createGameGoal(@ModelAttribute EventGoal event){
+    public String createGameGoal(@ModelAttribute EventGoal event, Model model){
         this.eventService.addEvent(event);
+        if(event.getGame().getEvents().size() == 0 ||
+            event.getGame().getLastEvent().getType() == EventType.END ||
+            event.getGame().getLastEvent().getType() == EventType.INTERRUPT ||
+            event.getGame().hasRedCards(event.getPlayer())) {
+            model.addAttribute("prev", "/game?id=" + event.getGame().getId());
+            return "invalid-event";
+        }
         return "redirect:/events";
     }
 
@@ -127,7 +147,14 @@ public class UserController {
     }
 
     @PostMapping("/create-game-interrupt")
-    public String createGameInterrupt(@ModelAttribute EventInterrupt event){
+    public String createGameInterrupt(@ModelAttribute EventInterrupt event, Model model){
+        if(event.getGame().getEvents().size() == 0 ||
+            event.getGame().getLastEvent().getType() == EventType.END ||
+            event.getGame().getLastEvent().getType() == EventType.INTERRUPT){
+            model.addAttribute("prev", "/game?id=" + event.getGame().getId());
+            return "invalid-event";
+        }
+            
         this.eventService.addEvent(event);
         return "redirect:/events";
     }
@@ -141,7 +168,14 @@ public class UserController {
     }
 
     @PostMapping("/create-game-red-card")
-    public String createGameRedCard(@ModelAttribute EventRedCard event){
+    public String createGameRedCard(@ModelAttribute EventRedCard event, Model model){
+        if(event.getGame().getEvents().size() == 0 ||
+            event.getGame().getLastEvent().getType() == EventType.END ||
+            event.getGame().getLastEvent().getType() == EventType.INTERRUPT ||
+            event.getGame().hasRedCards(event.getPlayer())) {
+            model.addAttribute("prev", "/game?id=" + event.getGame().getId());
+            return "invalid-event";
+        }
         this.eventService.addEvent(event);       
         return "redirect:/events";
     }
@@ -154,7 +188,13 @@ public class UserController {
     }
 
     @PostMapping("/create-game-resume")
-    public String createGameResume(@ModelAttribute EventResume event){
+    public String createGameResume(@ModelAttribute EventResume event, Model model){
+        if(event.getGame().getEvents().size() == 0 ||
+            event.getGame().getLastEvent().getType() == EventType.END ||
+            event.getGame().getLastEvent().getType() != EventType.INTERRUPT) {
+            model.addAttribute("prev", "/game?id=" + event.getGame().getId());
+            return "invalid-event";
+        }
         this.eventService.addEvent(event);
         return "redirect:/events";
     }
@@ -168,7 +208,14 @@ public class UserController {
     }
 
     @PostMapping("/create-game-yellow-card")
-    public String createGameYellowCard(@ModelAttribute EventYellowCard event){
+    public String createGameYellowCard(@ModelAttribute EventYellowCard event, Model model){
+        if(event.getGame().getEvents().size() == 0 ||
+            event.getGame().getLastEvent().getType() == EventType.END ||
+            event.getGame().getLastEvent().getType() == EventType.INTERRUPT ||
+            event.getGame().hasRedCards(event.getPlayer())) {
+            model.addAttribute("prev", "/game?id=" + event.getGame().getId());
+            return "invalid-event";
+        }
         this.eventService.addEvent(event);
         return "redirect:/events";
     }

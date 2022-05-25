@@ -3,17 +3,38 @@
     <head>
         <title>User List</title>
         <meta charset="utf8"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     </head>
 
     <body>
-        <h1>List</h1>
-        <table>
-            <tr>
-                <th>Name</th>
-            </tr>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Admin</th>
+                    <th scope="col">Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td class="align-middle" scope="row" th:text="${user.id}">Id</td>
+                    <td class="align-middle" th:text="${user.username}">Username</td>
+                    <td class="align-middle" th:text="${user.email}">Email</td>
+                    <td class="align-middle" th:text="${user.phone}">Phone</td>
+                    <td class="align-middle" th:text="${user.isAdmin}">isAdmin</td>
+                    <td>
+                        <div style="display: flex;">
+                            <a class="btn btn-primary btn-sm" th:href="@{/admin/edit-user(id=${user.id})}" style="width: 100px; margin-right: 10px;">Edit</a>
+                            <form th:method="post" th:action="@{/admin/delete-user(id=${user.id})}">
+                                <input class="btn btn-danger btn-sm" type="submit" style="width: 100px;" value="Delete"/>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
         </table>
-        <tr th:each="u : ${users}">
-            <td th:text="${u.username}">userName</td>
-        </tr>
     </body>
 </html>

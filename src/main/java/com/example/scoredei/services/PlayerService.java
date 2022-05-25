@@ -28,11 +28,20 @@ public class PlayerService {
         return this.playerRepository.findById(id);
     }
 
-    public void deletePlayer(int id) {
-        this.playerRepository.deleteById(id);
+    public boolean deletePlayer(int id) {
+        Optional<Player> player = this.playerRepository.findById(id);
+        if(!player.isPresent()) {
+            return false;
+        }
+        try {
+            this.playerRepository.deleteById(id);
+        }catch ( IllegalArgumentException e) {
+            return false;
+        }
+        return true;
     }
 
-    public void deletePlayer(Player player) {
-        this.playerRepository.delete(player);
+    public boolean deletePlayer(Player player) {
+        return deletePlayer(player.getId());
     }
 }
