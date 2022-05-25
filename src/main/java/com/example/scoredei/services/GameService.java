@@ -59,26 +59,4 @@ public class GameService {
         return this.deleteGame(game.getId());
     }
 
-    public Player getBestScorer() {
-        Map<Player, Integer> goals = new HashMap<>();
-        Player bestScorer = null;
-        int maxGoals = 0;
-        int aux;
-        for(Game game : this.getGames()) {
-            for(Event event : game.getEvents()) {
-                if(event.getType() == EventType.GOAL) {
-                    EventGoal eventGoal = (EventGoal) event;
-                    Player player= eventGoal.getPlayer();
-                    aux = goals.getOrDefault(player, 0) + 1;
-                    goals.put(player, aux);
-                    if(aux > maxGoals) {
-                        maxGoals = aux;
-                        bestScorer = player;
-                    }
-                }   
-            }
-        }
-        return bestScorer;
-    }
-
 }

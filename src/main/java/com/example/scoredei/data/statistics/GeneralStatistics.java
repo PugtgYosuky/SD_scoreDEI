@@ -1,10 +1,13 @@
 package com.example.scoredei.data.statistics;
 
+import com.example.scoredei.data.Event;
 import com.example.scoredei.data.Game;
+import com.example.scoredei.data.Player;
 import com.example.scoredei.data.Team;
+import com.example.scoredei.data.events.EventGoal;
+import com.example.scoredei.data.types.EventType;
 import com.example.scoredei.services.GameService;
 import com.example.scoredei.services.TeamService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +32,12 @@ public class GeneralStatistics {
 
     private Map<Team, Integer> numberOfGames;
 
+    private Map<Player, Integer> goals;
+
+    private Player bestScorer;
+    
+    private int maxGoals;
+
     public GeneralStatistics(GameService gameService, TeamService teamService) {
         this.gameService = gameService;
         this.teamService = teamService;
@@ -39,6 +48,9 @@ public class GeneralStatistics {
         this.numberOfGoalsConceded = new HashMap<>();
         this.teamPoints = new HashMap<>();
         this.numberOfGames = new HashMap<>();
+        this.goals = new HashMap<>();
+        this.bestScorer = null;
+        this.maxGoals = 0;
         this.process();
     }
 
@@ -46,7 +58,7 @@ public class GeneralStatistics {
         // CHECK IF THE GAME IS OVER
         for(Game game : this.gameService.getGames()) {
             GameStatistics gameStatistics = new GameStatistics(game);
-
+            this.processBestScorer(game);
             int teamAGoals = gameStatistics.getTeamGoals(game.getTeamA()).size();
             int teamBGoals = gameStatistics.getTeamGoals(game.getTeamB()).size();
 
@@ -72,8 +84,27 @@ public class GeneralStatistics {
                 this.teamPoints.put(game.getTeamA(), this.teamPoints.getOrDefault(game.getTeamA(), 0) + 1);
                 this.teamPoints.put(game.getTeamB(), this.teamPoints.getOrDefault(game.getTeamB(), 0) + 1);
             }
-
         }
+    }
+
+    private void processBestScorer(Game game){
+        int aux;
+        for(Event event : game.getEvents()) {
+            if(event.getType() == EventType.GOAL) {
+                EventGoal eventGoal = (EventGoal) event;
+                Player player = eventGoal.getPlayer();
+                aux = goals.getOrDefault(player, 0) + 1;
+                goals.put(player, aux);
+                if(aux > maxGoals) {
+                    maxGoals = aux;
+                    bestScorer = player;
+                }
+            }   
+        }
+    }
+
+    public Player getBestScorer() {
+        return this.bestScorer;
     }
 
     public int getWins(Team team) {
