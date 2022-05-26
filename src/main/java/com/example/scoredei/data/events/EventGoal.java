@@ -25,6 +25,9 @@ public class EventGoal extends Event {
     public EventGoal(Game game){
         super(EventType.GOAL,game);
     }
+    public EventGoal(Game game, Date time) {
+        super(EventType.GOAL, game, time);
+    }
     
     public EventGoal(Game game, Date time, Player player, Team team) {
         super(EventType.GOAL, game, time);

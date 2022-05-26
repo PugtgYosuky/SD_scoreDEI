@@ -7,10 +7,12 @@
     </head>
 
     <body>
+        <header th:replace="navbar :: navbar"></header>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Username</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
@@ -21,6 +23,7 @@
             <tbody>
                 <tr th:each="user : ${users}">
                     <td class="align-middle" scope="row" th:text="${user.id}">Id</td>
+                    <td class="align-middle" th:text="${user.name}">Name</td>
                     <td class="align-middle" th:text="${user.username}">Username</td>
                     <td class="align-middle" th:text="${user.email}">Email</td>
                     <td class="align-middle" th:text="${user.phone}">Phone</td>

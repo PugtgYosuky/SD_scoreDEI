@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -73,6 +74,7 @@ public class Game {
     }
 
     public List<Event> getEvents() {
+        this.events.sort(Comparator.comparing(Event::getTime).reversed());
         return events;
     }
 

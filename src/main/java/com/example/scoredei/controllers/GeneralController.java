@@ -5,6 +5,7 @@ import com.example.scoredei.data.Player;
 import com.example.scoredei.data.Team;
 import com.example.scoredei.data.User;
 import com.example.scoredei.data.filters.AdminFilter;
+import com.example.scoredei.data.forms.EventForm;
 import com.example.scoredei.data.forms.LoginForm;
 import com.example.scoredei.data.statistics.GameStatistics;
 import com.example.scoredei.data.statistics.GeneralStatistics;
@@ -79,25 +80,25 @@ public class GeneralController {
         return "players";
     }
 
-    @GetMapping("/events")
-    public String getEvents(Model model){
-        model.addAttribute("events", this.eventService.getEvents());
-        return "events";
-    }
-
     @GetMapping("/")
     public String homePage(Model model) {
         return "redirect:/games";
     }
 
-    //TODO: create endpoints to see a especific team, game, player, user, event
-
     @GetMapping("/game")
     public String getGame(@RequestParam(name="id", required=true) int id, Model model) {
         Optional<Game> g = this.gameService.getGame(id);
         if(g.isPresent()){
-            model.addAttribute("game", g.get());
-            model.addAttribute("gameStatistics", new GameStatistics(g.get()));
+            Game game = g.get();
+            model.addAttribute("game", game);
+
+            List<Player> players = game.getTeamA().getPlayers();
+            players.addAll(game.getTeamB().getPlayers());
+
+            model.addAttribute("teams", game.getTeams());
+            model.addAttribute("players", players);
+            model.addAttribute("eventForm", new EventForm(game));
+            model.addAttribute("gameStatistics", new GameStatistics(game));
             return "game";
         }
         model.addAttribute("prev", "/games");

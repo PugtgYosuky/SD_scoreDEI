@@ -2,7 +2,7 @@
 <html use-expressions="true" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
     <head>
-        <title>Game list</title>
+        <title>NavBar</title>
         <meta charset="utf8"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     </head>
@@ -14,9 +14,10 @@
             </a>
         
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="/games" class="nav-link px-2 link-secondary">Games</a></li>
-                <li><a href="/teams" class="nav-link px-2 link-dark">Teams</a></li>
-                <li><a href="/players" class="nav-link px-2 link-dark">Players</a></li>
+                <li><a href="/games" th:classappend="${#request.requestURI.startsWith('/games') ? 'nav-link px-2 link-secondary': 'nav-link px-2 link-dark'}">Games</a></li>
+                <li><a href="/teams" th:classappend="${#request.requestURI.startsWith('/teams') ? 'nav-link px-2 link-secondary': 'nav-link px-2 link-dark'}">Teams</a></li>
+                <li><a href="/players" th:classappend="${#request.requestURI.startsWith('/players') ? 'nav-link px-2 link-secondary': 'nav-link px-2 link-dark'}">Players</a></li>
+                <li th:if="${session.user?.isAdmin}"><a href="/admin/users" th:classappend="${#request.requestURI.startsWith('/admin') ? 'nav-link px-2 link-secondary': 'nav-link px-2 link-dark'}">Users</a></li>
             </ul>
         
             <div class="col-md-3 text-end" style="display: flex;">

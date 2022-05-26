@@ -1,14 +1,25 @@
-<form th:action="@{/admin/save-edit-team}" th:object="${team}" method="post">
-    <div class="form-row">
-        <input type="hidden" th:field="*{id}">
-        <div>
-            <label>Name</label>
-            <input type="text" th:field="*{name}"/>
-        </div>
-        <div>
-            <label>Image Url</label>
-            <input type="url" th:field="*{imageURL}"/>
-        </div>
-        <button type="submit">Save Team</button>
-    </div>
-</form>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Edit Team</title>
+        <meta charset="utf8"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    </head>
+    <body>
+        <header th:replace="navbar :: navbar"></header>
+        <form th:action="@{/admin/save-edit-team}" th:object="${team}" method="post">
+            <div class="form-row">
+                <input type="hidden" th:field="*{id}">
+                <div>
+                    <label>Name</label>
+                    <input type="text" th:field="*{name}"/>
+                </div>
+                <div>
+                    <label>Image Url</label>
+                    <input type="url" th:field="*{imageURL}"/>
+                </div>
+                <button type="submit">Save Team</button>
+            </div>
+        </form>
+    </body>
+</html>

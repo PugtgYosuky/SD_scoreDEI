@@ -3,17 +3,27 @@
     <head>
         <title>Game</title>
         <meta charset="utf8"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     </head>
 
     <body>
-        <div>
-            <h1 th:text="${game.getTeamA().name + ' ' + gameStatistics.getTeamGoals(game.getTeamA()).size() + ' - ' + gameStatistics.getTeamGoals(game.getTeamB()).size() + ' ' + game.getTeamB().name}">Game</h1>
+        <header th:replace="navbar :: navbar"></header>
+        <div style="width: 100%; text-align: center; justify-content: center;">
+            <div style="width: 100%; display: flex; text-align: center; justify-content: center; vertical-align: middle;">
+                <img style="margin-right: 10px"; width="100px;" height="100px;" th:src="${game.getTeamA().imageURL}"/>
+                <h1 th:text="${game.getTeamA().name + ' ' + gameStatistics.getTeamGoals(game.getTeamA()).size() + ' - ' + gameStatistics.getTeamGoals(game.getTeamB()).size() + ' ' + game.getTeamB().name}">Game</h1>
+                <img style="margin-right: 10px"; width="100px;" height="100px;" th:src="${game.getTeamB().imageURL}"/>
+            </div>
             <h2 th:text="${game.location}"></h2>
             <h2 th:text="${game.start}"></h2>
         </div>
 
-        <div th:each="event : ${game.events}">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Add Event
+        </button>
+
+        <div th:each="event : ${game.getEvents()}">
             <div class="event">
                 <div th:switch="${event.type}">
                     <div th:case="${T(com.example.scoredei.data.types.EventType).GOAL}" class="card border-primary mb-3" style="max-width: 18rem;">
@@ -75,10 +85,124 @@
             </div>
         </div>
 
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Event</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="selectEvent">Type</label>
+                            <select class="form-control" id="selectEvent">
+                                <option th:each="e : ${T(com.example.scoredei.data.types.EventType).values()}" th:value="${e}" th:text="${e}"></option>
+                            </select>
+                        </div>
+                        <form id="END" th:action="@{/add-game-end}" th:object="${eventForm}" method="post">
+                            <input type="hidden" th:field="*{game}">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                            </div>
+                        </form>
+
+                        <form hidden id="GOAL" th:action="@{/add-game-goal}" th:object="${eventForm}" method="post">
+                            <input type="hidden" th:field="*{game}">
+                            <div class="form-row">
+                                <div>
+                                    <label>Player</label>
+                                    <select class="form-control" th:field="*{player}">
+                                        <option th:each="p : ${players}" th:value="${p.id}" th:text="${p.name}"></option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Team</label>
+                                    <select class="form-control" th:field="*{team}">
+                                        <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                            </div>
+                        </form>
+                        
+                        <form hidden id="INTERRUPT" th:action="@{/add-game-interrupt}" th:object="${eventForm}" method="post">
+                            <input type="hidden" th:field="*{game}">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                            </div>
+                        </form>
+
+                        <form hidden id="RED_CARD" th:action="@{/add-game-red-card}" th:object="${eventForm}" method="post">
+                            <input type="hidden" th:field="*{game}">
+                            <div class="form-row">
+                                <div>
+                                    <label>Player</label>
+                                    <select class="form-control" th:field="*{player}">
+                                        <option th:each="p : ${players}" th:value="${p.id}" th:text="${p.name}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit"class="btn btn-success">Confirm</button>
+                            </div>
+                        </form>
+
+                        <form hidden id="RESUME" th:action="@{/add-game-resume}" th:object="${eventForm}" method="post">
+                            <input type="hidden" th:field="*{game}">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                            </div>
+                        </form>
+                        
+                        <form hidden id="START" th:action="@{/add-game-start}" th:object="${eventForm}" method="post">
+                            <input type="hidden" th:field="*{game}">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                            </div>
+                        </form>
+
+                        <form hidden id="YELLOW_CARD" th:action="@{/add-game-yellow-card}" th:object="${eventForm}" method="post">
+                            <input type="hidden" th:field="*{game}">
+                            <div class="form-row">
+                                <div>
+                                    <label>Player</label>
+                                    <select class="form-control" th:field="*{player}">
+                                        <option th:each="p : ${players}" th:value="${p.id}" th:text="${p.name}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <a class="btn btn-primary" th:href="@{game-statistics(id=${game.id})}">Statistics</a>
         <form th:method="post" th:action="@{/admin/delete-game(id=${game.id})}">
             <input class="btn btn-danger" type="submit" value="Delete"/>
         </form>
+
+        <script>
+            $('#selectEvent').on('change', function() {
+                $('#selectEvent option').each(function() {
+                    $('#' + $(this).val()).attr('hidden', true);
+                })
+                $('#' + $(this).val()).removeAttr('hidden');
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     </body>
 
 </html>

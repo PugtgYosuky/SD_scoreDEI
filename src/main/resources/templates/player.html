@@ -5,6 +5,7 @@
         <meta charset="utf8"/>
     </head>
     <body>
+    <header th:replace="navbar :: navbar"></header>
         <h1 th:text="${player.name}"></h1>
         <h2 th:text="${player.birthDate}"></h2>
         <h2 th:text="${player.position}"></h2>

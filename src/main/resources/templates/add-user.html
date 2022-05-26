@@ -1,29 +1,40 @@
-<form th:action="@{/admin/create-user}" th:object="${user}" method="post">
-    <div class="form-row">
-        <div>
-            <label>Name</label>
-            <input type="text" th:field="*{name}" placeholder="Name"/>
-        </div>
-        <div>
-            <label>Username</label>
-            <input type="text" th:field="*{username}" placeholder="Username"/>
-        </div>
-        <div>
-            <label>Email</label>
-            <input type="email" th:field="*{email}" placeholder="email@example.com"/>
-        </div>
-        <div>
-            <label>Password</label>
-            <input type="password" th:field="*{password}" placeholder="password"/>
-        </div>
-        <div>
-            <label>Phone</label>
-            <input type="text" th:field="*{phone}" placeholder="Phone"/>
-        </div>
-        <div>
-            <label>Is Admin?</label>
-            <input type="checkbox" th:field="*{isAdmin}" placeholder="Is Admin?"/>
-        </div>
-        <button type="submit">Create User</button>
-    </div>
-</form>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add User</title>
+        <meta charset="utf8"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    </head>
+    <body>
+        <header th:replace="navbar :: navbar"></header>
+        <form th:action="@{/admin/create-user}" th:object="${user}" method="post">
+            <div class="form-row">
+                <div>
+                    <label>Name</label>
+                    <input type="text" th:field="*{name}" placeholder="Name"/>
+                </div>
+                <div>
+                    <label>Username</label>
+                    <input type="text" th:field="*{username}" placeholder="Username"/>
+                </div>
+                <div>
+                    <label>Email</label>
+                    <input type="email" th:field="*{email}" placeholder="email@example.com"/>
+                </div>
+                <div>
+                    <label>Password</label>
+                    <input type="password" th:field="*{password}" placeholder="password"/>
+                </div>
+                <div>
+                    <label>Phone</label>
+                    <input type="text" th:field="*{phone}" placeholder="Phone"/>
+                </div>
+                <div>
+                    <label>Is Admin?</label>
+                    <input type="checkbox" th:field="*{isAdmin}" placeholder="Is Admin?"/>
+                </div>
+                <button type="submit">Create User</button>
+            </div>
+        </form>
+    </body>
+</html>

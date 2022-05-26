@@ -22,6 +22,10 @@ public class EventYellowCard extends Event {
     public EventYellowCard(Game game) {
         super(EventType.YELLOW_CARD, game);
     }
+
+    public EventYellowCard(Game game, Date time) {
+        super(EventType.YELLOW_CARD, game, time);
+    }
     
     public EventYellowCard(Game game, Date time, Player player) {
         super(EventType.YELLOW_CARD, game, time);

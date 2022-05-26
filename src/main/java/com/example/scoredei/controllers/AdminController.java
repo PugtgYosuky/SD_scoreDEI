@@ -98,19 +98,6 @@ public class AdminController {
         return "users";
     }
 
-    @GetMapping("/user")
-    public String getUser(@RequestParam("username") String username, Model model) {
-        Optional<User> user = this.userService.getUser(username);
-        if (user.isPresent()) {
-            model.addAttribute("user", user.get());
-            return "user";
-        } else {
-            model.addAttribute("prev", "/admin/users");
-            model.addAttribute("message", "User not found");
-            return "404";
-        }
-    }
-
     // *********************** EDIT METHODS ***********************
 
     @GetMapping("/edit-team")

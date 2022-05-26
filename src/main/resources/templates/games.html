@@ -10,29 +10,38 @@
     <body>
         <header th:replace="navbar :: navbar"></header>
 
-        <h1>Games</h1>
-        <div th:each="g : ${games}">
-            <div>
-                <td th:text="${g.getTeamA().name}">teamAName</td>
-                <img width="100px" height="100px" th:src="${g.getTeamA().imageURL}" />
-            </div>
-            <div>
-                <td th:text="${g.getTeamB().name}">teamBName</td>
-                <img width="100px" height="100px" th:src="${g.getTeamB().imageURL}" />
-            </div>
-            <div>
-                <p th:text="${g.location}"></p>
-                <p th:text="${g.start}"></p>
-            </div>
-            <div th:each="g : ${g.events}">
-                <p th:text="${g.time}"></p>
-            </div>
-            <a class="btn btn-warning" th:href="@{admin/edit-game(id=${g.id})}">Edit</a>
-            <a class="btn btn-primary" role="button" th:href="@{game(id=${g.id})}">Details</a>
-            <form th:method="post" th:action="@{/admin/delete-game(id=${g.id})}">
-                <input class="btn btn-danger" type="submit" value="Delete"/>
-            </form>
-        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Teams</th>
+                    <th scope="col">Start</th>
+                    <th scope="col">Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="g : ${games}">
+                    <td class="align-middle" scope="row" th:text="${g.id}">Id</td>
+                    <td class="align-middle" style="display: flex;">
+                        <img style="margin-right: 10px"; width="30px;" height="30px;" th:src="${g.getTeamA().imageURL}"/>
+                        <div style="height: 100%" class="row align-items-center">
+                            <div class="col-md-12" th:text="${g.getTeamA().name + ' vs ' + g.getTeamB().name}" />
+                        </div>
+                        <img style="margin-left: 10px";  width="30px;" height="30px;" th:src="${g.getTeamB().imageURL}"/>
+                    </td>
+                    <td class="align-middle" th:text="${g.start}">Start</td>
+                    <td>
+                        <div class="align-middle" style="display: flex;">
+                            <a style="width: 100px; height: 30px; margin-right: 10px;" class="btn btn-warning btn-sm" th:href="@{/admin/edit-game(id=${g.id})}">Edit</a>
+                            <a style="width: 100px; height: 30px; margin-right: 10px;" class="btn btn-primary btn-sm" role="button" th:href="@{game(id=${g.id})}">Details</a>
+                            <form th:method="post" th:action="@{/admin/delete-game(id=${g.id})}">
+                                <input class="btn btn-danger btn-sm" type="submit" style="width: 100px; height: 30px; margin-right: 10px;" value="Delete"/>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     </body>

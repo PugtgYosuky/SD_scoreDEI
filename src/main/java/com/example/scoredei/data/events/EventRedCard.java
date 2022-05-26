@@ -18,6 +18,9 @@ public class EventRedCard extends Event {
     public EventRedCard() {
         super(EventType.RED_CARD);
     }
+    public EventRedCard(Game game, Date time) {
+        super(EventType.RED_CARD, game, time);
+    }
 
     public EventRedCard(Game game, Date time, Player player) {
         super(EventType.RED_CARD, game, time);
