@@ -8,6 +8,7 @@ import com.example.scoredei.data.events.EventRedCard;
 import com.example.scoredei.data.events.EventResume;
 import com.example.scoredei.data.events.EventStart;
 import com.example.scoredei.data.events.EventYellowCard;
+import com.example.scoredei.data.filters.AuthFilter;
 import com.example.scoredei.data.forms.EventForm;
 import com.example.scoredei.data.types.EventType;
 import com.example.scoredei.services.EventService;
@@ -17,15 +18,19 @@ import com.example.scoredei.services.TeamService;
 import com.example.scoredei.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Date;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -43,10 +48,22 @@ public class UserController {
     @Autowired
     EventService eventService;
 
+    @Bean
+    public FilterRegistrationBean<AuthFilter> loggingFilter() {
+        FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
+
+        registrationBean.setFilter(new AuthFilter());
+        registrationBean.addUrlPatterns("/user/*");
+        registrationBean.setOrder(2);
+
+        return registrationBean;
+    }
+
     @PostMapping("/add-game-start")
     public String createGameStart(@ModelAttribute EventForm eventForm, Model model){
         Game game = eventForm.getGame();
-        if(game.getEvents().size() != 0) {
+        if(game.getEvents().size() != 0 ||
+            new Date().compareTo(game.getStart()) < 0){
             model.addAttribute("prev", "/game?id=" + game.getId());
             return "invalid-event";
         }

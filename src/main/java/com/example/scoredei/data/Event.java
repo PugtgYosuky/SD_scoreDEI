@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 @XmlRootElement
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Event {
+public class Event implements Comparable<Event> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -20,6 +20,10 @@ public class Event {
     private Game game;
 
     private EventType type;
+
+    public Event() {
+
+    }
 
     public Event(EventType type) {
         this.type = type;
@@ -76,5 +80,10 @@ public class Event {
                 ", game=" + game +
                 ", type=" + type +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Event o) {
+        return time.compareTo(o.getTime());
     }
 }

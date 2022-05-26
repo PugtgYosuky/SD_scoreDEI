@@ -18,8 +18,8 @@ import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
 @Component
-@Order(1)
-public class AdminFilter implements Filter, javax.servlet.Filter {
+@Order(2)
+public class AuthFilter implements Filter, javax.servlet.Filter {
 
     @Override
     public void doFilter(ServletRequest request,
@@ -30,16 +30,10 @@ public class AdminFilter implements Filter, javax.servlet.Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        if(session.getAttribute("user") == null){
-            httpResponse.sendRedirect("/");
-        } else {
-            User user = (User) session.getAttribute("user");
-            if(!user.getIsAdmin())
-                httpResponse.sendRedirect("/");
-            else
-                chain.doFilter(request, response);
-        }
-
+        if(session.getAttribute("user") == null)
+            httpResponse.sendRedirect("/games");
+        else
+            chain.doFilter(request, response);
     }
 
     @Override

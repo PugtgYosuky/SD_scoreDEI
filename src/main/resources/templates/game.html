@@ -19,9 +19,10 @@
             <h2 th:text="${game.start}"></h2>
         </div>
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button th:if="${game.isFinish() == false and session.user != null}" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Add Event
         </button>
+        <a class="btn btn-primary" th:href="@{game-statistics(id=${game.id})}">Statistics</a>
 
         <div th:each="event : ${game.getEvents()}">
             <div class="event">
@@ -99,7 +100,7 @@
                                 <option th:each="e : ${T(com.example.scoredei.data.types.EventType).values()}" th:value="${e}" th:text="${e}"></option>
                             </select>
                         </div>
-                        <form id="END" th:action="@{/add-game-end}" th:object="${eventForm}" method="post">
+                        <form id="END" th:action="@{/user/add-game-end}" th:object="${eventForm}" method="post">
                             <input type="hidden" th:field="*{game}">
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -107,7 +108,7 @@
                             </div>
                         </form>
 
-                        <form hidden id="GOAL" th:action="@{/add-game-goal}" th:object="${eventForm}" method="post">
+                        <form hidden id="GOAL" th:action="@{/user/add-game-goal}" th:object="${eventForm}" method="post">
                             <input type="hidden" th:field="*{game}">
                             <div class="form-row">
                                 <div>
@@ -129,7 +130,7 @@
                             </div>
                         </form>
                         
-                        <form hidden id="INTERRUPT" th:action="@{/add-game-interrupt}" th:object="${eventForm}" method="post">
+                        <form hidden id="INTERRUPT" th:action="@{/user/add-game-interrupt}" th:object="${eventForm}" method="post">
                             <input type="hidden" th:field="*{game}">
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -137,7 +138,7 @@
                             </div>
                         </form>
 
-                        <form hidden id="RED_CARD" th:action="@{/add-game-red-card}" th:object="${eventForm}" method="post">
+                        <form hidden id="RED_CARD" th:action="@{/user/add-game-red-card}" th:object="${eventForm}" method="post">
                             <input type="hidden" th:field="*{game}">
                             <div class="form-row">
                                 <div>
@@ -153,7 +154,7 @@
                             </div>
                         </form>
 
-                        <form hidden id="RESUME" th:action="@{/add-game-resume}" th:object="${eventForm}" method="post">
+                        <form hidden id="RESUME" th:action="@{/user/add-game-resume}" th:object="${eventForm}" method="post">
                             <input type="hidden" th:field="*{game}">
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -161,7 +162,7 @@
                             </div>
                         </form>
                         
-                        <form hidden id="START" th:action="@{/add-game-start}" th:object="${eventForm}" method="post">
+                        <form hidden id="START" th:action="@{/user/add-game-start}" th:object="${eventForm}" method="post">
                             <input type="hidden" th:field="*{game}">
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -169,7 +170,7 @@
                             </div>
                         </form>
 
-                        <form hidden id="YELLOW_CARD" th:action="@{/add-game-yellow-card}" th:object="${eventForm}" method="post">
+                        <form hidden id="YELLOW_CARD" th:action="@{/user/add-game-yellow-card}" th:object="${eventForm}" method="post">
                             <input type="hidden" th:field="*{game}">
                             <div class="form-row">
                                 <div>
@@ -189,7 +190,6 @@
             </div>
         </div>
 
-        <a class="btn btn-primary" th:href="@{game-statistics(id=${game.id})}">Statistics</a>
         <form th:method="post" th:action="@{/admin/delete-game(id=${game.id})}">
             <input class="btn btn-danger" type="submit" value="Delete"/>
         </form>

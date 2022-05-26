@@ -18,16 +18,18 @@ public class Player {
     private PlayerType position;
     @ManyToOne
     private Team team;
+    private String imageURL;
 
     public Player() {
 
     }
 
-    public Player(String name, Date birthDate, PlayerType position, Team team) {
+    public Player(String name, Date birthDate, PlayerType position, Team team, String imageURL) {
         this.name = name;
         this.birthDate = birthDate;
         this.position = position;
         this.team = team;
+        this.imageURL = imageURL;
     }
 
     public int getId() {
@@ -68,6 +70,14 @@ public class Player {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getImageURL() {
+        return imageURL;
     }
 
     @Override

@@ -1,29 +1,47 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Player list</title>
-    <meta charset="utf8"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-</head>
+    <head>
+        <title>User List</title>
+        <meta charset="utf8"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    </head>
 
-<body>
-    <header th:replace="navbar :: navbar"></header>
-<h1>List</h1>
-<table>
-    <tr>
-        <th>Name</th>
-    </tr>
-    <tr th:each="p : ${players}">
-        <td th:text="${p.name}">playerName</td>
-        <td th:text="${p.birthDate}">playerBirthday</td>
-        <td th:text="${p.position}">playerPosition</td>
-        <td th:text="${p.team.name}">teamName</td>
-        <img width="100px" height="100px" th:src="${p.team.imageURL}" />
-        <a th:href="@{admin/edit-player(id=${p.id})}">Edit</a>
-        <form th:method="post" th:action="@{/admin/delete-player(id=${p.id})}">
-            <input type="submit" value="Delete"/>
-        </form>
-    </tr>
-</table>
-</body>
+    <body>
+        <header th:replace="navbar :: navbar"></header>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Birthday</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Team</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p : ${players}">
+                    <td class="align-middle" scope="row">
+                        <img width="80px;" height="80px;" th:src="${p.imageURL}"/>
+                    </td>
+                    <td class="align-middle" th:text="${p.name}">Name</td>
+                    <td class="align-middle" th:text="${p.birthDate}">Birthdate</td>
+                    <td class="align-middle" th:text="${p.position}">Position</td>
+                    <td class="align-middle">
+                        <div style="display: flex;">
+                            <div class="align-middle" th:text="${p.team.name}"></div>
+                            <img style="margin-left: 10px;" width="80px;" height="80px;" th:src="${p.team.imageURL}"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex;">
+                            <a style="width: 100px; height: 30px; margin-right: 10px;" class="btn btn-warning btn-sm" th:href="@{admin/edit-player(id=${p.id})}">Edit</a>
+                            <form th:method="post" th:action="@{/admin/delete-player(id=${p.id})}">
+                                <input class="btn btn-danger btn-sm" style="width: 100px; height: 30px; margin-right: 10px;" type="submit" value="Delete"/>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
 </html>

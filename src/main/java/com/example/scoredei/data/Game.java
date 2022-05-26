@@ -109,7 +109,8 @@ public class Game {
     public Event getLastEvent() {
         if(this.events.size() == 0)
             return null;
-        return this.events.get(this.events.size() - 1);
+        this.events.sort(Comparator.comparing(Event::getTime).reversed());
+        return this.events.get(0);
     }
 
     public int getYellowCards(Player player) {
@@ -133,6 +134,20 @@ public class Game {
             }
         }
         return false;
+    }
+
+    public boolean isRunning() {
+        return !isFinish() && this.events.size() > 0;
+    }
+
+    public boolean notStarted() {
+        return this.events.size() == 0;
+    }
+
+    public boolean isFinish() {
+        if(this.events.size() == 0)
+            return false;
+        return this.getLastEvent().getType() == EventType.END;
     }
 
 }

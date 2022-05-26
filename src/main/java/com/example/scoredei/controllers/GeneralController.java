@@ -4,7 +4,7 @@ import com.example.scoredei.data.Game;
 import com.example.scoredei.data.Player;
 import com.example.scoredei.data.Team;
 import com.example.scoredei.data.User;
-import com.example.scoredei.data.filters.AdminFilter;
+
 import com.example.scoredei.data.forms.EventForm;
 import com.example.scoredei.data.forms.LoginForm;
 import com.example.scoredei.data.statistics.GameStatistics;
@@ -16,8 +16,6 @@ import com.example.scoredei.services.TeamService;
 import com.example.scoredei.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,19 +46,6 @@ public class GeneralController {
 
     @Autowired
     EventService eventService;
-
-    @Bean
-    public FilterRegistrationBean<AdminFilter> loggingFilter(){
-        FilterRegistrationBean<AdminFilter> registrationBean
-                = new FilterRegistrationBean<>();
-
-        registrationBean.setFilter(new AdminFilter());
-        registrationBean.addUrlPatterns("/admin/*");
-
-        registrationBean.setOrder(1);
-
-        return registrationBean;
-    }
 
     @GetMapping("/teams")
     public String getTeams(Model model) {

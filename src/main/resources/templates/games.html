@@ -17,6 +17,7 @@
                     <th scope="col">Teams</th>
                     <th scope="col">Start</th>
                     <th scope="col">Manage</th>
+                    <th scope="col">State</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,9 +40,16 @@
                             </form>
                         </div>
                     </td>
+                    <td class="align-middle" th:if="${g.isRunning()}">Running</td>
+                    <td class="align-middle" th:if="${g.isFinish()}">Finished</td>
+                    <td class="align-middle" th:if="${g.notStarted()}">Not Started</td>
                 </tr>
             </tbody>
         </table>
+
+        <form style="width: 100%; height: 1000px" th:method="post" th:action="@{/admin/populate-database}">
+            <input style="width: 100%; height: 1000px" class="btn btn-danger btn-large" type="submit" value="GEN DATA"/>
+        </form>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     </body>

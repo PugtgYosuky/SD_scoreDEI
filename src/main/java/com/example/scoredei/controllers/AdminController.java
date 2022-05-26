@@ -1,14 +1,27 @@
 package com.example.scoredei.controllers;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
+import java.util.Random;
 
 import com.example.scoredei.data.Game;
 import com.example.scoredei.data.Player;
 import com.example.scoredei.data.Team;
 import com.example.scoredei.data.User;
+import com.example.scoredei.data.filters.AdminFilter;
 import com.example.scoredei.data.forms.GameForm;
+import com.example.scoredei.data.types.PlayerType;
 import com.example.scoredei.services.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +48,19 @@ public class AdminController {
 
     @Autowired
     EventService eventService;
+
+    // *********************** FILTER ***********************
+
+    @Bean
+    public FilterRegistrationBean<AdminFilter> adminLoggingFilter(){
+        FilterRegistrationBean<AdminFilter> registrationBean = new FilterRegistrationBean<>();
+
+        registrationBean.setFilter(new AdminFilter());
+        registrationBean.addUrlPatterns("/admin/*");
+        registrationBean.setOrder(1);
+
+        return registrationBean;
+    }
 
     // *********************** ADD METHODS ***********************
 
@@ -210,5 +236,75 @@ public class AdminController {
         model.addAttribute("message", "User not found");
         return "404";
 
+    }
+
+
+    //************************ POPULATE DATABASE ************************/
+    
+    private void addPlayers(Team team, int teamID) {
+
+        try {
+            URL url = new URL("https://v3.football.api-sports.io/players?team=" + teamID + "&season=2020");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.setRequestProperty("x-rapidapi-host", "v3.football.api-sports.io");
+            connection.setRequestProperty("x-rapidapi-key", "9af036df620d9dc4891f40a38f9f94bf");
+            
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line = bufferedReader.readLine();
+    
+            connection.disconnect();
+
+            JSONObject response = new JSONObject(line);
+            JSONArray players = response.getJSONArray("response");
+
+            for(int i = 0; i < players.length(); i++){
+                JSONObject playerObject = players.getJSONObject(i).getJSONObject("player");
+                JSONObject birth = playerObject.getJSONObject("birth");
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(birth.getString("date"));
+                PlayerType position = PlayerType.values()[new Random().nextInt(PlayerType.values().length)];
+                Player player = new Player(playerObject.getString("name"), date, position, team, playerObject.getString("photo"));
+                this.playerService.addPlayer(player);
+            }
+        }catch(Exception exc) {
+            exc.printStackTrace();
+        }
+    }
+
+    @PostMapping("/populate-database")
+    public String populateDatabase() {
+        
+        try {
+            URL url = new URL("https://v3.football.api-sports.io/teams?country=Portugal");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.setRequestProperty("x-rapidapi-host", "v3.football.api-sports.io");
+            connection.setRequestProperty("x-rapidapi-key", "9af036df620d9dc4891f40a38f9f94bf");
+            
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line = bufferedReader.readLine();
+    
+            connection.disconnect();
+            System.out.println(line);
+
+            JSONObject response = new JSONObject(line);
+            JSONArray teams = response.getJSONArray("response");
+
+            for(int i = 1; i < 11; i++){
+                JSONObject teamObject = teams.getJSONObject(i).getJSONObject("team");
+                Team team = new Team(teamObject.getString("name"), teamObject.getString("logo"));
+                this.teamService.addTeam(team);
+                addPlayers(team, teamObject.getInt("id"));
+            }
+        } catch(Exception exc) {
+            exc.printStackTrace();
+        }
+
+            
+        return "redirect:/games";
     }
 }
