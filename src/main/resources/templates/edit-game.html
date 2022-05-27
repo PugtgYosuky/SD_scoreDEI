@@ -7,33 +7,35 @@
     </head>
     <body>
         <header th:replace="navbar :: navbar"></header>
-        <form th:action="@{/admin/save-edit-game}" th:object="${gameForm}" method="post">
-            <div class="form-row">
-                <input type="hidden" th:field="*{game.id}">
-                <input type="hidden" th:field="*{game.teams}">
-                <input type="hidden" th:field="*{game.events}">
-                <div>
-                    <label>Team A</label>
-                    <select th:field="*{teamA}">
-                        <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
-                    </select>
+        <center>
+            <form style="width: 25%;" th:action="@{/admin/save-edit-game}" th:object="${gameForm}" method="post">
+                <div class="form-row">
+                    <input type="hidden" th:field="*{game.id}">
+                    <input type="hidden" th:field="*{game.teams}">
+                    <input type="hidden" th:field="*{game.events}">
+                    <div class="form-group">
+                        <label>Team A</label>
+                        <select class="form-control" th:field="*{teamA}">
+                            <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Team B</label>
+                        <select class="form-control" th:field="*{teamB}">
+                            <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input class="form-control" type="text" th:field="*{game.location}" placeholder="Location"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input class="form-control" type="datetime-local" th:field="*{game.start}" placeholder="Date"/>
+                    </div>
+                    <button style="margin-top: 10px;" class="btn btn-success" type="submit">Save Game</button>
                 </div>
-                <div>
-                    <label>Team B</label>
-                    <select th:field="*{teamB}">
-                        <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
-                    </select>
-                </div>
-                <div>
-                    <label>Location</label>
-                    <input type="text" th:field="*{game.location}" placeholder="Location"/>
-                </div>
-                <div>
-                    <label>Date</label>
-                    <input type="datetime-local" th:field="*{game.start}" placeholder="Date"/>
-                </div>
-                <button type="submit">Save Game</button>
-            </div>
-        </form>
+            </form>
+        </center>
     </body>
 </html>

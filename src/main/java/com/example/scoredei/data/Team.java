@@ -11,6 +11,7 @@ public class Team {
     
     @Id @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
+    @Column(unique = true)
     private String name;
     @Column(length = 1024)
     private String imageURL;

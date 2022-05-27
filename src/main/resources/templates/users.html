@@ -8,6 +8,9 @@
 
     <body>
         <header th:replace="navbar :: navbar"></header>
+        <center>
+            <a class="btn btn-primary btn-sm" href="/admin/add-user">Add User</a>
+        </center>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -30,7 +33,7 @@
                     <td class="align-middle" th:text="${user.isAdmin}">isAdmin</td>
                     <td>
                         <div style="display: flex;">
-                            <a class="btn btn-primary btn-sm" th:href="@{/admin/edit-user(id=${user.id})}" style="width: 100px; margin-right: 10px;">Edit</a>
+                            <a class="btn btn-warning btn-sm" th:href="@{/admin/edit-user(id=${user.id})}" style="width: 100px; margin-right: 10px;">Edit</a>
                             <form th:method="post" th:action="@{/admin/delete-user(id=${user.id})}">
                                 <input class="btn btn-danger btn-sm" type="submit" style="width: 100px;" value="Delete"/>
                             </form>

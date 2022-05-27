@@ -12,79 +12,85 @@
         <div style="width: 100%; text-align: center; justify-content: center;">
             <div style="width: 100%; display: flex; text-align: center; justify-content: center; vertical-align: middle;">
                 <img style="margin-right: 10px"; width="100px;" height="100px;" th:src="${game.getTeamA().imageURL}"/>
-                <h1 th:text="${game.getTeamA().name + ' ' + gameStatistics.getTeamGoals(game.getTeamA()).size() + ' - ' + gameStatistics.getTeamGoals(game.getTeamB()).size() + ' ' + game.getTeamB().name}">Game</h1>
+                <div style="font-size: 30px; height: 100px; line-height: 100px;" class="align-middle" th:text="${game.getTeamA().name + ' ' + gameStatistics.getTeamGoals(game.getTeamA()).size() + ' - ' + gameStatistics.getTeamGoals(game.getTeamB()).size() + ' ' + game.getTeamB().name}"></div>
                 <img style="margin-right: 10px"; width="100px;" height="100px;" th:src="${game.getTeamB().imageURL}"/>
             </div>
             <h2 th:text="${game.location}"></h2>
             <h2 th:text="${game.start}"></h2>
         </div>
-
-        <button th:if="${game.isFinish() == false and session.user != null}" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Add Event
-        </button>
-        <a class="btn btn-primary" th:href="@{game-statistics(id=${game.id})}">Statistics</a>
-
-        <div th:each="event : ${game.getEvents()}">
-            <div class="event">
-                <div th:switch="${event.type}">
-                    <div th:case="${T(com.example.scoredei.data.types.EventType).GOAL}" class="card border-primary mb-3" style="max-width: 18rem;">
-                        <div class="card-header text-bg-primary d-flex justify-content-between">
-                            <p th:text="${event.type}"></p>
-                            <img th:src="${event.team.imageURL}" width="30px" height="30px" />
+        <div style="width: 100%; justify-content: center; display: flex; margin-bottom: 10px;">
+            <a style="width: 100px; height: 30px; margin-right: 10px;" class="btn btn-primary btn-sm" th:href="@{game-statistics(id=${game.id})}">Statistics</a>
+            <button style="width: 100px; height: 30px; margin-right: 10px;" th:if="${game.isFinish() == false and session.user != null}" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Add Event
+            </button>
+            <form th:method="post" th:action="@{/admin/delete-game(id=${game.id})}">
+                <input style="width: 100px; height: 30px;" class="btn btn-danger btn-sm" type="submit" value="Delete"/>
+            </form>
+        </div>
+        <center>
+            <div th:each="event : ${game.getEvents()}">
+                <div class="event">
+                    <div th:switch="${event.type}">
+                        <div th:case="${T(com.example.scoredei.data.types.EventType).GOAL}" class="card border-primary mb-3" style="max-width: 18rem;">
+                            <div class="card-header text-bg-primary d-flex justify-content-between">
+                                <p th:text="${event.type}"></p>
+                                <img th:src="${event.team.imageURL}" width="30px" height="30px" />
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text" th:text="${event.player.name + ' scored a goal for ' + event.team.name}"></p>
+                            </div>
+    
+                            <div class="card-footer">
+                                <small class="text-muted" th:text="${event.time}"></small>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text" th:text="${event.player.name + ' scored a goal for ' + event.team.name}"></p>
+    
+    
+                        <div th:case="${T(com.example.scoredei.data.types.EventType).YELLOW_CARD}" class="card border-warning mb-3" style="max-width: 18rem;">
+                            <div class="card-header text-bg-warning d-flex justify-content-between">
+                                <p th:text="${event.type}"></p>
+                                <img th:src="${event.player.team.imageURL}" width="30px" height="30px" />
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text" th:text="${'Yellow card for ' + event.player.name + ' [' + event.player.team.name + ']'}"></p>
+                            </div>
+    
+                            <div class="card-footer">
+                                <small class="text-muted" th:text="${event.time}"></small>
+                            </div>
                         </div>
-
-                        <div class="card-footer">
-                            <small class="text-muted" th:text="${event.time}"></small>
+    
+                        <div th:case="${T(com.example.scoredei.data.types.EventType).RED_CARD}" class="card border-danger mb-3" style="max-width: 18rem;">
+                            <div class="card-header text-bg-danger d-flex justify-content-between">
+                                <p th:text="${event.type}"></p>
+                                <img th:src="${event.player.team.imageURL}" width="30px" height="30px" />
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text" th:text="${'Red card for ' + event.player.name + ' [' + event.player.team.name + ']'}"></p>
+                            </div>
+    
+                            <div class="card-footer">
+                                <small class="text-muted" th:text="${event.time}"></small>
+                            </div>
                         </div>
-                    </div>
-
-
-                    <div th:case="${T(com.example.scoredei.data.types.EventType).YELLOW_CARD}" class="card border-warning mb-3" style="max-width: 18rem;">
-                        <div class="card-header text-bg-warning d-flex justify-content-between">
-                            <p th:text="${event.type}"></p>
-                            <img th:src="${event.player.team.imageURL}" width="30px" height="30px" />
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text" th:text="${'Yellow card for ' + event.player.name + ' [' + event.player.team.name + ']'}"></p>
-                        </div>
-
-                        <div class="card-footer">
-                            <small class="text-muted" th:text="${event.time}"></small>
-                        </div>
-                    </div>
-
-                    <div th:case="${T(com.example.scoredei.data.types.EventType).RED_CARD}" class="card border-danger mb-3" style="max-width: 18rem;">
-                        <div class="card-header text-bg-danger d-flex justify-content-between">
-                            <p th:text="${event.type}"></p>
-                            <img th:src="${event.player.team.imageURL}" width="30px" height="30px" />
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text" th:text="${'Red card for ' + event.player.name + ' [' + event.player.team.name + ']'}"></p>
-                        </div>
-
-                        <div class="card-footer">
-                            <small class="text-muted" th:text="${event.time}"></small>
-                        </div>
-                    </div>
-                    
-                    <div th:case="*" class="card border-secondary mb-3" style="max-width: 18rem;">
-                        <div class="card-header">
-                            <p th:text="${event.type}"></p>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">This is a event :D</p>
-                        </div>
-
-                        <div class="card-footer">
-                            <small class="text-muted" th:text="${event.time}"></small>
+                        
+                        <div th:case="*" class="card border-secondary mb-3" style="max-width: 18rem;">
+                            <div class="card-header">
+                                <p th:text="${event.type}"></p>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">This is a event :D</p>
+                            </div>
+    
+                            <div class="card-footer">
+                                <small class="text-muted" th:text="${event.time}"></small>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </center>
+
 
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -189,10 +195,6 @@
                 </div>
             </div>
         </div>
-
-        <form th:method="post" th:action="@{/admin/delete-game(id=${game.id})}">
-            <input class="btn btn-danger" type="submit" value="Delete"/>
-        </form>
 
         <script>
             $('#selectEvent').on('change', function() {

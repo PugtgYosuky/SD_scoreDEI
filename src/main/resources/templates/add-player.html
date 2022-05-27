@@ -7,30 +7,36 @@
     </head>
     <body>
         <header th:replace="navbar :: navbar"></header>
-        <form th:action="@{/admin/create-player}" th:object="${player}" method="post">
-            <div class="form-row">
-                <div>
-                    <label>Name</label>
-                    <input type="text" th:field="*{name}" placeholder="Name"/>
+        <center>
+            <form style="width: 25%;" th:action="@{/admin/create-player}" th:object="${player}" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input class="form-control" type="text" th:field="*{name}" placeholder="Name"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Image Url</label>
+                        <input class="form-control" type="url" th:field="*{imageURL}" placeholder="image url"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Birthday</label>
+                        <input class="form-control" type="date" th:field="*{birthDate}" placeholder="Birthday"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Position</label>
+                        <select class="form-control" th:field="*{position}">
+                            <option th:each="pos : ${T(com.example.scoredei.data.types.PlayerType).values()}" th:value="${pos}" th:text="${pos}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Team</label>
+                        <select class="form-control" th:field="*{team}">
+                            <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
+                        </select>
+                    </div>
+                    <button style="margin-top: 10px;" class="btn btn-success" type="submit">Create Player</button>
                 </div>
-                <div>
-                    <label>Birthday</label>
-                    <input type="date" th:field="*{birthDate}" placeholder="Birthday"/>
-                </div>
-                <div>
-                    <label>Position</label>
-                    <select th:field="*{position}">
-                        <option th:each="pos : ${T(com.example.scoredei.data.types.PlayerType).values()}" th:value="${pos}" th:text="${pos}"></option>
-                    </select>
-                </div>
-                <div>
-                    <label>Team</label>
-                    <select th:field="*{team}">
-                        <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
-                    </select>
-                </div>
-                <button type="submit">Create Player</button>
-            </div>
-        </form>
+            </form>
+        </center>
     </body>
 </html>

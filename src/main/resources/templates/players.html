@@ -8,6 +8,9 @@
 
     <body>
         <header th:replace="navbar :: navbar"></header>
+        <center>
+            <a th:if="${session.user?.isAdmin}" class="btn btn-primary btn-sm" href="/admin/add-player">Add Player</a>
+        </center>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -16,6 +19,7 @@
                     <th scope="col">Birthday</th>
                     <th scope="col">Position</th>
                     <th scope="col">Team</th>
+                    <th th:if="${session.user?.isAdmin}" scope="col">Manage</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,11 +32,11 @@
                     <td class="align-middle" th:text="${p.position}">Position</td>
                     <td class="align-middle">
                         <div style="display: flex;">
-                            <div class="align-middle" th:text="${p.team.name}"></div>
+                            <div style="height: 80px; line-height: 80px;" class="align-middle" th:text="${p.team.name}"></div>
                             <img style="margin-left: 10px;" width="80px;" height="80px;" th:src="${p.team.imageURL}"/>
                         </div>
                     </td>
-                    <td>
+                    <td class="align-middle" th:if="${session.user?.isAdmin}">
                         <div style="display: flex;">
                             <a style="width: 100px; height: 30px; margin-right: 10px;" class="btn btn-warning btn-sm" th:href="@{admin/edit-player(id=${p.id})}">Edit</a>
                             <form th:method="post" th:action="@{/admin/delete-player(id=${p.id})}">
@@ -43,5 +47,6 @@
                 </tr>
             </tbody>
         </table>
+
     </body>
 </html>

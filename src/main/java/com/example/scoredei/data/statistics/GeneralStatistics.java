@@ -55,8 +55,10 @@ public class GeneralStatistics {
     }
 
     private void process() {
-        // CHECK IF THE GAME IS OVER
         for(Game game : this.gameService.getGames()) {
+            if(!game.isFinish()) {
+                continue;
+            }
             GameStatistics gameStatistics = new GameStatistics(game);
             this.processBestScorer(game);
             int teamAGoals = gameStatistics.getTeamGoals(game.getTeamA()).size();

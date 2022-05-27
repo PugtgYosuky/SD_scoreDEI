@@ -7,18 +7,20 @@
     </head>
     <body>
         <header th:replace="navbar :: navbar"></header>
-        <form th:action="@{/admin/create-team}" th:object="${team}" method="post">
-            <div class="form-row">
-                <div>
-                    <label>Name</label>
-                    <input type="text" th:field="*{name}" placeholder="Name"/>
+        <center>
+            <form style="width: 25%;" th:action="@{/admin/create-team}" th:object="${team}" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input class="form-control" type="text" th:field="*{name}" placeholder="Name"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Image Url</label>
+                        <input class="form-control" type="url" th:field="*{imageURL}" placeholder="image url"/>
+                    </div>
                 </div>
-                <div>
-                    <label>Image Url</label>
-                    <input type="url" th:field="*{imageURL}" placeholder="image url"/>
-                </div>
-                <button type="submit">Create Team</button>
-            </div>
-        </form>
+                <button style="margin-top: 10px;" class="btn btn-success" type="submit">Create Team</button>
+            </form>
+        </center>
     </body>
 </html>

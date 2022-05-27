@@ -23,8 +23,8 @@
             <div class="col-md-3 text-end" style="display: flex;">
                 <div th:if="${session.user}">
                     <div class="align-middle" style="display: flex;">
-                        <span th:text="${session.user.username}" style="padding-right: 10px;"></span>
-                        <a class="btn btn-outline-primary me-2" href="/logout">Logout</a>
+                        <div style="height: 40px; line-height: 40px; margin-right: 10px;" class="align-middle" th:text="${session.user.username}"></div>
+                        <a style="height: 40px;" class="btn btn-outline-primary me-2" href="/logout">Logout</a>
                     </div>
                 </div>
                 <div th:if="${session.user == null}">

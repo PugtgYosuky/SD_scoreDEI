@@ -49,7 +49,15 @@ public class GeneralController {
 
     @GetMapping("/teams")
     public String getTeams(Model model) {
-        model.addAttribute("teams", this.teamService.getTeams());
+        GeneralStatistics generalStatistics = new GeneralStatistics(gameService, teamService);
+
+        List<Team> teams = this.teamService.getTeams();
+        teams.sort(Comparator.comparingInt(generalStatistics::getTeamPoints).reversed());
+
+        model.addAttribute("teams", teams);
+        model.addAttribute("generalStatistics", generalStatistics);
+        //TODO: ver o melhor marcador do campeonato :)
+
         return "teams";
     }
 
@@ -126,20 +134,6 @@ public class GeneralController {
             return "game-statistics";
         }
         return "redirect:/games";
-    }
-
-    @GetMapping("/statistics")
-    public String getStatistics(Model model) {
-        GeneralStatistics generalStatistics = new GeneralStatistics(gameService, teamService);
-
-        List<Team> teams = this.teamService.getTeams();
-        teams.sort(Comparator.comparingInt(generalStatistics::getTeamPoints).reversed());
-
-        model.addAttribute("teams", teams);
-        model.addAttribute("generalStatistics", generalStatistics);
-        //TODO: ver o melhor marcador do campeonato :)
-
-        return "statistics";
     }
 
     @GetMapping("/login")

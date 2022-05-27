@@ -2,7 +2,9 @@ package com.example.scoredei.services;
 
 import java.util.*;
 
+import com.example.scoredei.data.Game;
 import com.example.scoredei.data.Player;
+import com.example.scoredei.repositories.GameRepository;
 import com.example.scoredei.repositories.PlayerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,9 @@ public class PlayerService {
 
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private GameRepository gameRepository;
 
     public void addPlayer(Player player) {
         playerRepository.save(player);
@@ -30,10 +35,13 @@ public class PlayerService {
 
     public boolean deletePlayer(int id) {
         Optional<Player> player = this.playerRepository.findById(id);
-        if(!player.isPresent()) {
+        if(player.isEmpty()) {
             return false;
         }
+        Player p = player.get();
         try {
+            for(Game game : p.getTeam().getGames())
+                gameRepository.deleteById(game.getId());
             this.playerRepository.deleteById(id);
         }catch ( IllegalArgumentException e) {
             return false;
