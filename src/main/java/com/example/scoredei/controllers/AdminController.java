@@ -51,8 +51,12 @@ public class AdminController {
     @Autowired
     PlayerService playerService;
 
-    // *********************** FILTER ***********************
-
+    /**
+     * This function creates a new FilterRegistrationBean, sets the filter to be the AdminFilter, adds
+     * the url pattern to be /admin/*, and sets the order to be 1.
+     * 
+     * @return A FilterRegistrationBean object.
+     */
     @Bean
     public FilterRegistrationBean<AdminFilter> adminLoggingFilter(){
         FilterRegistrationBean<AdminFilter> registrationBean = new FilterRegistrationBean<>();
@@ -64,14 +68,27 @@ public class AdminController {
         return registrationBean;
     }
 
-    // *********************** ADD METHODS ***********************
-
+    /**
+     * This function is called when the user navigates to the /add-user URL. It creates a new User
+     * object and adds it to the model. It then returns the add-user view
+     * 
+     * @param model This is the model object that will be used to pass data to the view.
+     * @return The add-user.html file
+     */
     @GetMapping("/add-user")
     public String addUser(Model model) {
         model.addAttribute("user", new User());
         return "add-user";
     }
 
+    /**
+     * If the user is not completed, return an invalid page. If the user is completed, add the user to
+     * the database
+     * 
+     * @param user The user object that is being created
+     * @param model The model object that is used to pass data to the view.
+     * @return A String
+     */
     @PostMapping("/create-user")
     public String createUser(@ModelAttribute User user, Model model) {
         if(!user.isCompleted()) {
@@ -84,16 +101,32 @@ public class AdminController {
             model.addAttribute("prev", "/admin/add-user");
             return "invalid";
         }
+        user.encrypt();
         this.userService.addUser(user);
         return "redirect:/admin/users";
     }
 
+    /**
+     * This function is called when the user navigates to the /add-team URL. It creates a new Team
+     * object and adds it to the model. It then returns the add-team view
+     * 
+     * @param model This is the model that will be passed to the view.
+     * @return A new team object
+     */
     @GetMapping("/add-team")
     public String addTeam(Model model) {
         model.addAttribute("team", new Team());
         return "add-team";
     }
 
+    /**
+     * If the team is not completed, return an error message. If the team is completed, add the team to
+     * the database
+     * 
+     * @param team the team object
+     * @param model The model object that is used to pass data to the view.
+     * @return A string
+     */
     @PostMapping("/create-team")
     public String createTeam(@ModelAttribute Team team, Model model) {
         if(!team.isCompleted()) {

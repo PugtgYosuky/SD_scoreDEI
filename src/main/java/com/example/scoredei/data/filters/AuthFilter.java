@@ -45,6 +45,8 @@ public class AuthFilter implements Filter, javax.servlet.Filter {
                 session.setAttribute("user", null);
                 httpResponse.sendRedirect("/games");
             }
+            user = userService.getUser(user.getId()).get();
+            session.setAttribute("user", user);
             chain.doFilter(request, response);
         }
     }

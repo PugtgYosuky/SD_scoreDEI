@@ -24,7 +24,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.Date;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/user")
@@ -83,6 +87,23 @@ public class UserController {
             return "invalid";
         }
         EventEnd event = new EventEnd(eventForm.getGame(), new Date());
+        long timeDiff = event.getTime().getTime() - eventForm.getGame().getStart().getTime();
+        long seconds = timeDiff / 1000;
+
+        long minGameLength = 0;
+
+        try {
+            BufferedReader input = new BufferedReader(new FileReader(new File(Objects.requireNonNull(getClass().getClassLoader().getResource("game.minLength")).toURI())));
+            minGameLength = Long.parseLong(input.readLine());
+        } catch(Exception exc) {
+            exc.printStackTrace();
+        }
+
+        if(seconds < minGameLength) {
+            model.addAttribute("message", "The game is too short!");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
         // TODO: confirmar que já passara pelo menos 90 min e que o jogo não tinha terminado
         this.eventService.addEvent(event);
         return "redirect:/game?id=" + eventForm.getGame().getId();

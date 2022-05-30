@@ -57,10 +57,6 @@
             <input class="btn btn-danger btn-large" type="submit" value="GEN GAMES"/>
         </form>
 
-        <form th:if="${session.user?.isAdmin}" th:method="post" th:action="@{/admin/delete-game?id=1023}">
-            <input class="btn btn-danger btn-large" type="submit" value="TEST 1"/>
-        </form>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     </body>
 </html>

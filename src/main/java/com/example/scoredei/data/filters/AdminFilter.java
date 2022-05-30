@@ -45,6 +45,8 @@ public class AdminFilter implements Filter, javax.servlet.Filter {
                 session.setAttribute("user", null);
                 httpResponse.sendRedirect("/games");
             } else {
+                user = userService.getUser(user.getId()).get();
+                session.setAttribute("user", user);
                 if (!user.getIsAdmin())
                     httpResponse.sendRedirect("/");
                 else
