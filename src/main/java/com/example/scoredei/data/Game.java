@@ -29,7 +29,7 @@ public class Game {
     public Game() {
         this.teams = new ArrayList<>();
         this.events = new ArrayList<>();
-        
+        this.start = null;
     }
 
     public Game(Team teamA, Team teamB, String location, Date start) {
@@ -148,6 +148,12 @@ public class Game {
         if(this.events.size() == 0)
             return false;
         return this.getLastEvent().getType() == EventType.END;
+    }
+
+    public boolean isCompleted() {
+        return !this.location.isEmpty()
+            && this.start != null
+            && this.teams.size() == 2;
     }
 
 }

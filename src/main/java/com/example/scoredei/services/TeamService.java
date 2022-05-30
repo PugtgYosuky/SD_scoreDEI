@@ -32,6 +32,10 @@ public class TeamService {
         return teams;
     }
 
+    public Optional<Team> getTeam(String name) {
+        return teamRepository.findByName(name);
+    }
+
     public Optional<Team> getTeam(int id) {
         return teamRepository.findById(id);
     }

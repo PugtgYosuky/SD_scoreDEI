@@ -12,9 +12,6 @@ import com.example.scoredei.data.filters.AuthFilter;
 import com.example.scoredei.data.forms.EventForm;
 import com.example.scoredei.data.types.EventType;
 import com.example.scoredei.services.EventService;
-import com.example.scoredei.services.GameService;
-import com.example.scoredei.services.PlayerService;
-import com.example.scoredei.services.TeamService;
 import com.example.scoredei.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +50,15 @@ public class UserController {
     @PostMapping("/add-game-start")
     public String createGameStart(@ModelAttribute EventForm eventForm, Model model){
         Game game = eventForm.getGame();
-        if(game.getEvents().size() != 0 ||
-            new Date().compareTo(game.getStart()) < 0){
+        if(eventForm.getGame().getEvents().size() != 0) {
+            model.addAttribute("message", "The game has already started!");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
+        if(new Date().compareTo(game.getStart()) < 0) {
+            model.addAttribute("message", "It's too soon to start the game!");
             model.addAttribute("prev", "/game?id=" + game.getId());
-            return "invalid-event";
+            return "invalid";
         }
         EventStart event = new EventStart(eventForm.getGame(), new Date());
         this.eventService.addEvent(event);
@@ -65,11 +67,20 @@ public class UserController {
 
     @PostMapping("/add-game-end")
     public String createGameEnd(@ModelAttribute EventForm eventForm, Model model){
-        if( eventForm.getGame().getEvents().size() == 0 ||
-            eventForm.getGame().getLastEvent().getType() == EventType.END ||
-            eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT) {
+        if(eventForm.getGame().getEvents().size() == 0) {
+            model.addAttribute("message", "The game hasn't started yet");
             model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
-            return "invalid-event";    
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.END) {
+            model.addAttribute("message", "The game has ended");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT) {
+            model.addAttribute("message", "The game has been interrupted");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
         }
         EventEnd event = new EventEnd(eventForm.getGame(), new Date());
         // TODO: confirmar que já passara pelo menos 90 min e que o jogo não tinha terminado
@@ -79,12 +90,25 @@ public class UserController {
 
     @PostMapping("/add-game-goal")
     public String createGameGoal(@ModelAttribute EventForm eventForm, Model model){
-        if(eventForm.getGame().getEvents().size() == 0 ||
-            eventForm.getGame().getLastEvent().getType() == EventType.END ||
-            eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT ||
-            eventForm.getGame().hasRedCards(eventForm.getPlayer())) {
+        if(eventForm.getGame().getEvents().size() == 0) {
+            model.addAttribute("message", "The game hasn't started yet");
             model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
-            return "invalid-event";
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.END) {
+            model.addAttribute("message", "The game has ended");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT) {
+            model.addAttribute("message", "The game has been interrupted");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
+        if(eventForm.getGame().hasRedCards(eventForm.getPlayer())) {
+            model.addAttribute("message", "This player has a red card");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
         }
         EventGoal event = new EventGoal(eventForm.getGame(), new Date(), eventForm.getPlayer(), eventForm.getTeam());
         this.eventService.addEvent(event);
@@ -93,11 +117,20 @@ public class UserController {
 
     @PostMapping("/add-game-interrupt")
     public String createGameInterrupt(@ModelAttribute EventForm eventForm, Model model){
-        if(eventForm.getGame().getEvents().size() == 0 ||
-            eventForm.getGame().getLastEvent().getType() == EventType.END ||
-            eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT){
+        if(eventForm.getGame().getEvents().size() == 0) {
+            model.addAttribute("message", "The game hasn't started yet");
             model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
-            return "invalid-event";
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.END) {
+            model.addAttribute("message", "The game has ended");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT) {
+            model.addAttribute("message", "The game has been interrupted");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
         }
         EventInterrupt event = new EventInterrupt(eventForm.getGame(), new Date());
         this.eventService.addEvent(event);
@@ -106,12 +139,25 @@ public class UserController {
 
     @PostMapping("/add-game-red-card")
     public String createGameRedCard(@ModelAttribute EventForm eventForm, Model model){
-        if(eventForm.getGame().getEvents().size() == 0 ||
-            eventForm.getGame().getLastEvent().getType() == EventType.END ||
-            eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT ||
-            eventForm.getGame().hasRedCards(eventForm.getPlayer())) {
+        if(eventForm.getGame().getEvents().size() == 0) {
+            model.addAttribute("message", "The game hasn't started yet");
             model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
-            return "invalid-event";
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.END) {
+            model.addAttribute("message", "The game has ended");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT) {
+            model.addAttribute("message", "The game has been interrupted");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
+        if(eventForm.getGame().hasRedCards(eventForm.getPlayer())) {
+            model.addAttribute("message", "This player has a red card");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
         }
         EventRedCard event = new EventRedCard(eventForm.getGame(), new Date(), eventForm.getPlayer());
         this.eventService.addEvent(event);       
@@ -120,11 +166,20 @@ public class UserController {
 
     @PostMapping("/add-game-resume")
     public String createGameResume(@ModelAttribute EventForm eventForm, Model model){
-        if(eventForm.getGame().getEvents().size() == 0 ||
-            eventForm.getGame().getLastEvent().getType() == EventType.END ||
-            eventForm.getGame().getLastEvent().getType() != EventType.INTERRUPT) {
+        if(eventForm.getGame().getEvents().size() == 0) {
+            model.addAttribute("message", "The game hasn't started yet");
             model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
-            return "invalid-event";
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.END) {
+            model.addAttribute("message", "The game has ended");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT) {
+            model.addAttribute("message", "The game has been interrupted");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
         }
         EventResume event = new EventResume(eventForm.getGame(), new Date());
         this.eventService.addEvent(event);
@@ -133,12 +188,25 @@ public class UserController {
 
     @PostMapping("/add-game-yellow-card")
     public String createGameYellowCard(@ModelAttribute EventForm eventForm, Model model){
-        if(eventForm.getGame().getEvents().size() == 0 ||
-            eventForm.getGame().getLastEvent().getType() == EventType.END ||
-            eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT ||
-            eventForm.getGame().hasRedCards(eventForm.getPlayer())) {
+        if(eventForm.getGame().getEvents().size() == 0) {
+            model.addAttribute("message", "The game hasn't started yet");
             model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
-            return "invalid-event";
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.END) {
+            model.addAttribute("message", "The game has ended");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
+        if(eventForm.getGame().getLastEvent().getType() == EventType.INTERRUPT) {
+            model.addAttribute("message", "The game has been interrupted");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
+        }
+        if(eventForm.getGame().hasRedCards(eventForm.getPlayer())) {
+            model.addAttribute("message", "This player has a red card");
+            model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
+            return "invalid";
         }
         EventYellowCard event = new EventYellowCard(eventForm.getGame(), new Date(), eventForm.getPlayer());
         this.eventService.addEvent(event);

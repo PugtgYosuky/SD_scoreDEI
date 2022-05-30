@@ -101,4 +101,12 @@ public class User {
         return this.username;
     }
 
+    public boolean isCompleted(){
+        return !this.name.isEmpty() && 
+                !this.username.isEmpty() && 
+                !this.password.isEmpty()&& 
+                !this.email.isEmpty() && 
+                !this.phone.isEmpty();
+    }
+
 }

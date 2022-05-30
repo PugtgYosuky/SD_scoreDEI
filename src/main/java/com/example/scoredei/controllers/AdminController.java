@@ -73,8 +73,17 @@ public class AdminController {
     }
 
     @PostMapping("/create-user")
-    public String createUser(@ModelAttribute User user) {
-        // user.setPassword(user.getPassword());
+    public String createUser(@ModelAttribute User user, Model model) {
+        if(!user.isCompleted()) {
+            model.addAttribute("message", "Invalid fields");
+            model.addAttribute("prev", "/admin/add-user");
+            return "invalid";
+        }
+        if(userService.getUser(user.getUsername()).isPresent()) {
+            model.addAttribute("message", "There is already a user with that username");
+            model.addAttribute("prev", "/admin/add-user");
+            return "invalid";
+        }
         this.userService.addUser(user);
         return "redirect:/admin/users";
     }
@@ -86,7 +95,17 @@ public class AdminController {
     }
 
     @PostMapping("/create-team")
-    public String createTeam(@ModelAttribute Team team) {
+    public String createTeam(@ModelAttribute Team team, Model model) {
+        if(!team.isCompleted()) {
+            model.addAttribute("message", "Invalid fields");
+            model.addAttribute("prev", "/admin/add-team");
+            return "invalid";
+        }
+        if(teamService.getTeam(team.getName()).isPresent()) {
+            model.addAttribute("message", "There is already a team with that name");
+            model.addAttribute("prev", "/admin/add-team");
+            return "invalid";
+        }
         this.teamService.addTeam(team);
         return "redirect:/teams";
     }
@@ -99,9 +118,19 @@ public class AdminController {
     }
 
     @PostMapping("/create-game")
-    public String createGame(@ModelAttribute GameForm gameForm) {
+    public String createGame(@ModelAttribute GameForm gameForm, Model model) {
         gameForm.getGame().addTeam(gameForm.getTeamA());
         gameForm.getGame().addTeam(gameForm.getTeamB());
+        if(!gameForm.getGame().isCompleted()) {
+            model.addAttribute("message", "Invalid fields");
+            model.addAttribute("prev", "/admin/add-game");
+            return "invalid";
+        }
+        if(gameForm.getTeamA().getName().equals(gameForm.getTeamB().getName())) {
+            model.addAttribute("message", "You can't create a game between the same team");
+            model.addAttribute("prev", "/admin/add-game");
+            return "invalid";
+        }
         this.gameService.addGame(gameForm.getGame());
         return "redirect:/games";
     }
@@ -114,7 +143,12 @@ public class AdminController {
     }
 
     @PostMapping("/create-player")
-    public String createPlayer(@ModelAttribute Player player) {
+    public String createPlayer(@ModelAttribute Player player, Model model) {
+        if(!player.isCompleted()) {
+            model.addAttribute("message", "Invalid fields");
+            model.addAttribute("prev", "/admin/add-user");
+            return "invalid";
+        }
         this.playerService.addPlayer(player);
         return "redirect:/players";
     }

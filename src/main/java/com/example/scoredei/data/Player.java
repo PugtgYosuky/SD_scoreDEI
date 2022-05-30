@@ -21,7 +21,9 @@ public class Player {
     private String imageURL;
 
     public Player() {
-
+        this.birthDate = null;
+        this.position = null;
+        this.team = null;
     }
 
     public Player(String name, Date birthDate, PlayerType position, Team team, String imageURL) {
@@ -89,6 +91,14 @@ public class Player {
                 ", position=" + position +
                 ", team=" + team +
                 '}';
+    }
+
+    public boolean isCompleted() {
+        return !this.name.isEmpty()
+            && !this.imageURL.isEmpty()
+            && this.birthDate != null
+            && this.position != null
+            && this.team != null;
     }
 
 

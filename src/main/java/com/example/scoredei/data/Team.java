@@ -74,4 +74,8 @@ public class Team {
     public String toString() {
         return "Team{" + "id=" + id + ", name=" + name + ", imageURL=" + imageURL + '}';
     }
+
+    public boolean isCompleted() {
+        return !this.name.isEmpty() && !this.imageURL.isEmpty();
+    }
 }
