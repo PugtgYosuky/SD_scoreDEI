@@ -1,6 +1,7 @@
 package com.example.scoredei.data.filters;
 
 import com.example.scoredei.data.User;
+import com.example.scoredei.services.UserService;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -21,6 +22,12 @@ import java.util.logging.LogRecord;
 @Order(2)
 public class AuthFilter implements Filter, javax.servlet.Filter {
 
+    private UserService userService;
+
+    public AuthFilter(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public void doFilter(ServletRequest request,
                          ServletResponse response,
@@ -32,8 +39,14 @@ public class AuthFilter implements Filter, javax.servlet.Filter {
 
         if(session.getAttribute("user") == null)
             httpResponse.sendRedirect("/games");
-        else
+        else {
+            User user = (User) session.getAttribute("user");
+            if(userService.getUser(user.getId()).isEmpty()) {
+                session.setAttribute("user", null);
+                httpResponse.sendRedirect("/games");
+            }
             chain.doFilter(request, response);
+        }
     }
 
     @Override

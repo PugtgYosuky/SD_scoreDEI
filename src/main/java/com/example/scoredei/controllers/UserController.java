@@ -34,25 +34,16 @@ import java.util.Date;
 public class UserController {
 
     @Autowired
-    UserService userService;
-
-    @Autowired
-    TeamService teamService;
-
-    @Autowired
-    GameService gameService;
-
-    @Autowired
-    PlayerService playerService;
-
-    @Autowired
     EventService eventService;
+
+    @Autowired
+    UserService userService;
 
     @Bean
     public FilterRegistrationBean<AuthFilter> loggingFilter() {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
 
-        registrationBean.setFilter(new AuthFilter());
+        registrationBean.setFilter(new AuthFilter(userService));
         registrationBean.addUrlPatterns("/user/*");
         registrationBean.setOrder(2);
 

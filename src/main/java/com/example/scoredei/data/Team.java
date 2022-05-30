@@ -17,7 +17,7 @@ public class Team {
     private String imageURL;
     @OneToMany(mappedBy="team")
     private List<Player> players;
-    @ManyToMany
+    @ManyToMany(mappedBy = "teams")
     private List<Game> games;
 
     public Team() {

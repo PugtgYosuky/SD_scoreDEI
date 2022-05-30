@@ -4,9 +4,6 @@ import java.util.*;
 
 import com.example.scoredei.data.Event;
 import com.example.scoredei.data.Game;
-import com.example.scoredei.data.Player;
-import com.example.scoredei.data.events.EventGoal;
-import com.example.scoredei.data.types.EventType;
 import com.example.scoredei.repositories.GameRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +17,6 @@ public class GameService {
 
     @Autowired
     private EventService eventService;
-
-    @Autowired
-    private UserService userService;
 
     public void addGame(Game game) {
         gameRepository.save(game);
@@ -40,11 +34,11 @@ public class GameService {
 
     public boolean deleteGame(int id) {
         Optional<Game> g = this.gameRepository.findById(id);
-        if(!g.isPresent()) 
+        if(g.isEmpty())
             return false;
         
         Game game = g.get();
-        for(Event event : game.getEvents()) 
+        for(Event event : game.getEvents())
             this.eventService.deleteEvent(event);
         
         try {

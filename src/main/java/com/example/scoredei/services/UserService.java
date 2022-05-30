@@ -33,7 +33,7 @@ public class UserService {
 
     public boolean deleteUser(int id){
         Optional<User> u = userRepository.findById(id);
-        if(!u.isPresent()) {
+        if(u.isEmpty()) {
             return false;
         }
         try {
@@ -46,7 +46,7 @@ public class UserService {
 
     public User authenticate(String username, String password) {
         Optional<User> u = userRepository.findByUsername(username);
-        if(!u.isPresent() || !u.get().getPassword().equals(password)){
+        if(u.isEmpty() || !u.get().samePassword(password)){
             return null;
         }
         return u.get();

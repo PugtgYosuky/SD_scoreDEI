@@ -1,20 +1,22 @@
 package com.example.scoredei.controllers;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import com.example.scoredei.data.Game;
 import com.example.scoredei.data.Player;
 import com.example.scoredei.data.Team;
 import com.example.scoredei.data.User;
+import com.example.scoredei.data.events.*;
 import com.example.scoredei.data.filters.AdminFilter;
 import com.example.scoredei.data.forms.GameForm;
+import com.example.scoredei.data.types.EventType;
 import com.example.scoredei.data.types.PlayerType;
 import com.example.scoredei.services.*;
 import org.json.JSONArray;
@@ -44,10 +46,10 @@ public class AdminController {
     GameService gameService;
 
     @Autowired
-    PlayerService playerService;
+    EventService eventService;
 
     @Autowired
-    EventService eventService;
+    PlayerService playerService;
 
     // *********************** FILTER ***********************
 
@@ -55,7 +57,7 @@ public class AdminController {
     public FilterRegistrationBean<AdminFilter> adminLoggingFilter(){
         FilterRegistrationBean<AdminFilter> registrationBean = new FilterRegistrationBean<>();
 
-        registrationBean.setFilter(new AdminFilter());
+        registrationBean.setFilter(new AdminFilter(userService));
         registrationBean.addUrlPatterns("/admin/*");
         registrationBean.setOrder(1);
 
@@ -72,6 +74,7 @@ public class AdminController {
 
     @PostMapping("/create-user")
     public String createUser(@ModelAttribute User user) {
+        // user.setPassword(user.getPassword());
         this.userService.addUser(user);
         return "redirect:/admin/users";
     }
@@ -241,7 +244,7 @@ public class AdminController {
 
     //************************ POPULATE DATABASE ************************/
     
-    private void addPlayers(Team team, int teamID) {
+    private void addPlayers(Team team, int teamID, String key) {
 
         try {
             URL url = new URL("https://v3.football.api-sports.io/players?team=" + teamID + "&season=2020");
@@ -250,7 +253,7 @@ public class AdminController {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
             connection.setRequestProperty("x-rapidapi-host", "v3.football.api-sports.io");
-            connection.setRequestProperty("x-rapidapi-key", "9af036df620d9dc4891f40a38f9f94bf");
+            connection.setRequestProperty("x-rapidapi-key", key);
             
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line = bufferedReader.readLine();
@@ -275,7 +278,15 @@ public class AdminController {
 
     @PostMapping("/populate-database")
     public String populateDatabase() {
-        
+
+        String key = "";
+        try {
+            BufferedReader input = new BufferedReader(new FileReader(new File(Objects.requireNonNull(getClass().getClassLoader().getResource("api.key")).toURI())));
+            key = input.readLine();
+        } catch(Exception exc) {
+            exc.printStackTrace();
+        }
+
         try {
             URL url = new URL("https://v3.football.api-sports.io/teams?country=Portugal");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -283,7 +294,7 @@ public class AdminController {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
             connection.setRequestProperty("x-rapidapi-host", "v3.football.api-sports.io");
-            connection.setRequestProperty("x-rapidapi-key", "9af036df620d9dc4891f40a38f9f94bf");
+            connection.setRequestProperty("x-rapidapi-key", key);
             
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line = bufferedReader.readLine();
@@ -294,17 +305,87 @@ public class AdminController {
             JSONObject response = new JSONObject(line);
             JSONArray teams = response.getJSONArray("response");
 
-            for(int i = 1; i < 11; i++){
+            for(int i = 1; i < 9; i++){
                 JSONObject teamObject = teams.getJSONObject(i).getJSONObject("team");
                 Team team = new Team(teamObject.getString("name"), teamObject.getString("logo"));
                 this.teamService.addTeam(team);
-                addPlayers(team, teamObject.getInt("id"));
+                addPlayers(team, teamObject.getInt("id"), key);
             }
+
         } catch(Exception exc) {
             exc.printStackTrace();
         }
 
             
+        return "redirect:/games";
+    }
+
+    @PostMapping("/populate-games")
+    public String populateGames() {
+        List<Team> allTeams = this.teamService.getTeams();
+        Random random = new Random();
+        for(int i = 0; i < 10; i++) {
+            int a = random.nextInt(allTeams.size()), b = random.nextInt(allTeams.size());
+            Team aa = allTeams.get(a), bb = allTeams.get(b);
+            if(a == b)
+                continue;
+            Date date = new Date();
+            Game game = new Game(aa, bb, "Estádio aleatório", date);
+            List<Player> players = new ArrayList<>(aa.getPlayers());
+            players.addAll(bb.getPlayers());
+            gameService.addGame(game);
+
+            Date after = new Date(date.getTime() + 60 * 1000);
+            EventStart start = new EventStart(game, after);
+            eventService.addEvent(start);
+            game.addEvent(start);
+            for(int j = 0; j < 10; j++) {
+                after = new Date(after.getTime() + 60 * 1000);
+                int rndEvent = random.nextInt(4);
+                if(game.getLastEvent().getType().equals(EventType.INTERRUPT)) {
+                    EventResume resume = new EventResume(game, after);
+                    eventService.addEvent(resume);
+                    game.addEvent(resume);
+                    continue;
+                }
+
+                Player rndPlayer = players.get(random.nextInt(players.size()));
+                switch (rndEvent) {
+                    case 0 -> {
+                        EventGoal goal = new EventGoal(game, after, players.get(random.nextInt(players.size())), random.nextInt(2) == 0 ? aa : bb);
+                        eventService.addEvent(goal);
+                        game.addEvent(goal);
+                    }
+                    case 1 -> {
+                        EventInterrupt interrupt = new EventInterrupt(game, after);
+                        eventService.addEvent(interrupt);
+                        game.addEvent(interrupt);
+                    }
+                    case 2 -> {
+                        if(!game.hasRedCards(rndPlayer)) {
+                            EventRedCard redCard = new EventRedCard(game, after, rndPlayer);
+                            eventService.addEvent(redCard);
+                            game.addEvent(redCard);
+                        }
+                    }
+                    case 3 -> {
+                        EventYellowCard yellowCard = new EventYellowCard(game, after, rndPlayer);
+                        eventService.addEvent(yellowCard);
+                        game.addEvent(yellowCard);
+                    }
+                }
+            }
+            if(game.getLastEvent().getType().equals(EventType.INTERRUPT)) {
+                after = new Date(after.getTime() + 60 * 1000);
+                EventResume resume = new EventResume(game, after);
+                eventService.addEvent(resume);
+                game.addEvent(resume);
+            }
+            EventEnd end = new EventEnd(game, new Date(after.getTime() + 60*1000));
+            eventService.addEvent(end);
+            game.addEvent(end);
+        }
+
         return "redirect:/games";
     }
 }

@@ -38,16 +38,17 @@ public class TeamService {
 
     public boolean deleteTeam(int id) {
         Optional<Team> t = teamRepository.findById(id);
-        if(!t.isPresent()) 
+        if(t.isEmpty())
             return false;
         
         Team team = t.get();
-        for (Player player : team.getPlayers()) 
-            playerService.deletePlayer(player);
-        
-        for (Game game : team.getGames()) 
+
+        for (Game game : team.getGames())
             gameService.deleteGame(game);
-        
+
+        for (Player player : team.getPlayers())
+            playerService.deletePlayer(player);
+
         try {
             this.teamRepository.deleteById(id);
         }catch ( IllegalArgumentException e) {

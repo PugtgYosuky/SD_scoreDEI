@@ -9,7 +9,6 @@ import com.example.scoredei.data.forms.EventForm;
 import com.example.scoredei.data.forms.LoginForm;
 import com.example.scoredei.data.statistics.GameStatistics;
 import com.example.scoredei.data.statistics.GeneralStatistics;
-import com.example.scoredei.services.EventService;
 import com.example.scoredei.services.GameService;
 import com.example.scoredei.services.PlayerService;
 import com.example.scoredei.services.TeamService;
@@ -44,8 +43,6 @@ public class GeneralController {
     @Autowired
     PlayerService playerService;
 
-    @Autowired
-    EventService eventService;
 
     @GetMapping("/teams")
     public String getTeams(Model model) {
@@ -56,7 +53,6 @@ public class GeneralController {
 
         model.addAttribute("teams", teams);
         model.addAttribute("generalStatistics", generalStatistics);
-        //TODO: ver o melhor marcador do campeonato :)
 
         return "teams";
     }
@@ -138,6 +134,9 @@ public class GeneralController {
 
     @GetMapping("/login")
     public String login(Model model) {
+        if(userService.getUser("admin").isEmpty() && userService.getUsers().size() == 0) {
+            userService.addUser(new User("admin", "admin", "admin", "admin@admin.com", "911111111", true));
+        }
         model.addAttribute("loginForm", new LoginForm());
         return "login";
     }
@@ -157,6 +156,7 @@ public class GeneralController {
         
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession session = attr.getRequest().getSession(true);
+
         if(user == null){
             session.setAttribute("user", null);
             return "invalid-login";

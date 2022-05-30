@@ -16,9 +16,9 @@ import java.util.Map;
 public class GameStatistics {
 
     private Game game;
-    private Map<Team, List<EventYellowCard>> yellowCards;
-    private Map<Team, List<EventRedCard>> redCards;
-    private Map<Team, List<EventGoal>> goals;
+    private final Map<Team, List<EventYellowCard>> yellowCards;
+    private final Map<Team, List<EventRedCard>> redCards;
+    private final Map<Team, List<EventGoal>> goals;
     private List<EventInterrupt> interrupts;
 
     public GameStatistics(Game game) {
@@ -44,25 +44,25 @@ public class GameStatistics {
         EventGoal goal;
         EventInterrupt interrupt;
         for(Event e : game.getEvents()) {
-            switch(e.getType()) {
-                case GOAL:
+            switch (e.getType()) {
+                case GOAL -> {
                     goal = (EventGoal) e;
                     this.goals.get(goal.getTeam()).add(goal);
-                    break;
-                case INTERRUPT:
+                }
+                case INTERRUPT -> {
                     interrupt = (EventInterrupt) e;
                     this.interrupts.add(interrupt);
-                    break;
-                case RED_CARD:
+                }
+                case RED_CARD -> {
                     redCard = (EventRedCard) e;
                     this.redCards.get(redCard.getPlayer().getTeam()).add(redCard);
-                    break;
-                case YELLOW_CARD:
+                }
+                case YELLOW_CARD -> {
                     yellowCard = (EventYellowCard) e;
                     this.yellowCards.get(yellowCard.getPlayer().getTeam()).add(yellowCard);
-                    break;
-                default:
-                    break;
+                }
+                default -> {
+                }
             }
         }
     }

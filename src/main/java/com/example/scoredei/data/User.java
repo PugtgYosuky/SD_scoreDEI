@@ -1,5 +1,7 @@
 package com.example.scoredei.data;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -22,9 +24,10 @@ public class User {
     }
 
     public User(String name, String username, String password, String email, String phone, boolean isAdmin) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         this.name = name;
         this.username = username;
-        this.password = password;
+        this.password = passwordEncoder.encode(password);
         this.email = email;
         this.phone = phone;
         this.isAdmin = isAdmin;
@@ -71,7 +74,8 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
     }
 
     public void setEmail(String email) {
@@ -84,6 +88,12 @@ public class User {
 
     public void setIsAdmin(boolean isAdmin){
         this.isAdmin = isAdmin;
+    }
+
+    public boolean samePassword(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        return passwordEncoder.matches(password, this.password);
     }
 
     @Override

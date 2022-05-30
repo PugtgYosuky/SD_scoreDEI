@@ -4,7 +4,6 @@ import java.util.*;
 
 import com.example.scoredei.data.Game;
 import com.example.scoredei.data.Player;
-import com.example.scoredei.repositories.GameRepository;
 import com.example.scoredei.repositories.PlayerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ public class PlayerService {
     private PlayerRepository playerRepository;
 
     @Autowired
-    private GameRepository gameRepository;
+    private GameService gameService;
 
     public void addPlayer(Player player) {
         playerRepository.save(player);
@@ -41,7 +40,7 @@ public class PlayerService {
         Player p = player.get();
         try {
             for(Game game : p.getTeam().getGames())
-                gameRepository.deleteById(game.getId());
+                gameService.deleteGame(game.getId());
             this.playerRepository.deleteById(id);
         }catch ( IllegalArgumentException e) {
             return false;
