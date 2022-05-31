@@ -7,6 +7,9 @@ import com.example.scoredei.data.types.EventType;
 import javax.persistence.Entity;
 import java.util.Date;
 
+/**
+ * EventInterrupt is a subclass of Event that represents an interrupt event
+ */
 @Entity
 public class EventInterrupt extends Event {
 

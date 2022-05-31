@@ -30,6 +30,9 @@ import java.io.FileReader;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * A controller class that handles the requests from the user autheticated.
+ */
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -40,6 +43,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    /**
+     * This function creates a new filter registration bean, sets the filter to be the AuthFilter, adds
+     * the url pattern to be /user/*, and sets the order to be 2.
+     * 
+     * @return A FilterRegistrationBean
+     */
     @Bean
     public FilterRegistrationBean<AuthFilter> loggingFilter() {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
@@ -51,6 +60,13 @@ public class UserController {
         return registrationBean;
     }
 
+    /**
+     * It checks if the game has already started, if it hasn't, it starts it
+     * 
+     * @param eventForm EventForm
+     * @param model Model
+     * @return A String
+     */
     @PostMapping("/add-game-start")
     public String createGameStart(@ModelAttribute EventForm eventForm, Model model){
         Game game = eventForm.getGame();
@@ -69,6 +85,13 @@ public class UserController {
         return "redirect:/game?id=" + game.getId();
     }
 
+    /**
+     * It adds an end event to a game
+     * 
+     * @param eventForm the form that contains the game and the event
+     * @param model the model that will be used to render the view
+     * @return A String
+     */
     @PostMapping("/add-game-end")
     public String createGameEnd(@ModelAttribute EventForm eventForm, Model model){
         if(eventForm.getGame().getEvents().size() == 0) {
@@ -104,11 +127,18 @@ public class UserController {
             model.addAttribute("prev", "/game?id=" + eventForm.getGame().getId());
             return "invalid";
         }
-        // TODO: confirmar que já passara pelo menos 90 min e que o jogo não tinha terminado
         this.eventService.addEvent(event);
         return "redirect:/game?id=" + eventForm.getGame().getId();
     }
 
+    /**
+     * If the game hasn't started, has ended, has been interrupted, or the player has a red card, then
+     * return an error message. Otherwise, add the goal to the game
+     * 
+     * @param eventForm contains the game, player and team
+     * @param model the model that is used to render the view
+     * @return A String
+     */
     @PostMapping("/add-game-goal")
     public String createGameGoal(@ModelAttribute EventForm eventForm, Model model){
         if(eventForm.getGame().getEvents().size() == 0) {
@@ -136,6 +166,14 @@ public class UserController {
         return "redirect:/game?id=" + eventForm.getGame().getId();
     }
 
+    /**
+     * If the game hasn't started yet, or has ended, or has been interrupted, then return an error
+     * message. Otherwise, create a new interrupt event
+     * 
+     * @param eventForm the form that contains the game and the event
+     * @param model the model that is used to render the page
+     * @return A String
+     */
     @PostMapping("/add-game-interrupt")
     public String createGameInterrupt(@ModelAttribute EventForm eventForm, Model model){
         if(eventForm.getGame().getEvents().size() == 0) {
@@ -158,6 +196,14 @@ public class UserController {
         return "redirect:/game?id=" + eventForm.getGame().getId();
     }
 
+    /**
+     * If the game hasn't started, has ended, or has been interrupted, or the player already has a red
+     * card, then return an error message. Otherwise, add a red card to the player
+     * 
+     * @param eventForm a class that contains the game and the player
+     * @param model the model that is used to render the view
+     * @return A string
+     */
     @PostMapping("/add-game-red-card")
     public String createGameRedCard(@ModelAttribute EventForm eventForm, Model model){
         if(eventForm.getGame().getEvents().size() == 0) {
@@ -185,6 +231,14 @@ public class UserController {
         return "redirect:/game?id=" + eventForm.getGame().getId();
     }
 
+    /**
+     * If the game hasn't started yet, or has ended, or has been interrupted, then return an error
+     * message. Otherwise, create a new event and add it to the game
+     * 
+     * @param eventForm the form that contains the game and the event
+     * @param model the model that is used to render the view
+     * @return A String
+     */
     @PostMapping("/add-game-resume")
     public String createGameResume(@ModelAttribute EventForm eventForm, Model model){
         if(eventForm.getGame().getEvents().size() == 0) {
@@ -207,6 +261,14 @@ public class UserController {
         return "redirect:/game?id=" + eventForm.getGame().getId();
     }
 
+    /**
+     * If the game hasn't started, or has ended, or has been interrupted, or the player has a red card,
+     * then return an error message. Otherwise, add a yellow card to the player
+     * 
+     * @param eventForm the form that contains the game and the player
+     * @param model the model that is used to render the view
+     * @return A string
+     */
     @PostMapping("/add-game-yellow-card")
     public String createGameYellowCard(@ModelAttribute EventForm eventForm, Model model){
         if(eventForm.getGame().getEvents().size() == 0) {

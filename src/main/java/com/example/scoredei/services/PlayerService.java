@@ -18,20 +18,42 @@ public class PlayerService {
     @Autowired
     private GameService gameService;
 
+    /**
+     * It adds a player to the database.
+     * 
+     * @param player The player object that is being passed in.
+     */
     public void addPlayer(Player player) {
         playerRepository.save(player);
     }
     
+    /**
+     * For each player in the database, add it to the list of players.
+     * 
+     * @return A list of players
+     */
     public List<Player> getPlayers() {
         List<Player> players = new ArrayList<>();
         playerRepository.findAll().forEach(players::add);
         return players;
     }
 
+    /**
+     * Find the player by id
+     * 
+     * @param id The id of the player you want to get.
+     * @return An Optional object.
+     */
     public Optional<Player> getPlayer(int id) {
         return this.playerRepository.findById(id);
     }
 
+    /**
+     * This function deletes a player from the database
+     * 
+     * @param id the id of the player to be deleted
+     * @return A boolean value.
+     */
     public boolean deletePlayer(int id) {
         Optional<Player> player = this.playerRepository.findById(id);
         if(player.isEmpty()) {
@@ -48,6 +70,12 @@ public class PlayerService {
         return true;
     }
 
+    /**
+     * This function deletes a player from the database
+     * 
+     * @param player The player object to be deleted.
+     * @return A boolean value.
+     */
     public boolean deletePlayer(Player player) {
         return deletePlayer(player.getId());
     }

@@ -7,6 +7,9 @@ import com.example.scoredei.data.types.EventType;
 import javax.persistence.Entity;
 import java.util.Date;
 
+/**
+ * EventStart is a subclass of Event that represents the start of a game
+ */
 @Entity
 public class EventStart extends Event {
 

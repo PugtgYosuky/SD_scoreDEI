@@ -7,6 +7,9 @@ import com.example.scoredei.data.types.EventType;
 import javax.persistence.Entity;
 import java.util.Date;
 
+/**
+ * EventEnd is a subclass of Event that represents the end of a game
+ */
 @Entity
 public class EventEnd extends Event {
 

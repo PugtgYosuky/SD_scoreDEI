@@ -10,6 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.util.Date;
 
+/**
+ * EventGoal is a subclass of Event, and it has a many-to-one relationship with Player and Team.
+ */
 @Entity
 public class EventGoal extends Event {
 
@@ -35,22 +38,47 @@ public class EventGoal extends Event {
         this.team = team;
     }
 
+    /**
+     * This function returns the player object
+     * 
+     * @return The player object.
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * This function sets the player variable to the player variable passed in
+     * 
+     * @param player The player that is being checked.
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * This function returns the team of the player
+     * 
+     * @return The team object.
+     */
     public Team getTeam() {
         return team;
     }
 
+    /**
+     * This function sets the team of the player
+     * 
+     * @param team The team that the player is on.
+     */
     public void setTeam(Team team) {
         this.team = team;
     }
 
+    /**
+     * The toString() method returns a string representation of the object
+     * 
+     * @return The player and team that scored the goal.
+     */
     @Override
     public String toString() {
         return "EventGoal{" + "player=" + player + ", team=" + team + '}';

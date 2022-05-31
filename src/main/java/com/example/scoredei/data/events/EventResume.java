@@ -7,6 +7,9 @@ import com.example.scoredei.data.types.EventType;
 import javax.persistence.Entity;
 import java.util.Date;
 
+/**
+ * EventResume is a subclass of Event that represents a resume event
+ */
 @Entity
 public class EventResume extends Event {
 

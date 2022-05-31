@@ -38,6 +38,7 @@ public class GeneralStatistics {
     
     private int maxGoals;
 
+    // A constructor.
     public GeneralStatistics(GameService gameService, TeamService teamService) {
         this.gameService = gameService;
         this.teamService = teamService;
@@ -54,6 +55,9 @@ public class GeneralStatistics {
         this.process();
     }
 
+    /**
+     * It processes the games and calculates the statistics for each team
+     */
     private void process() {
         for(Game game : this.gameService.getGames()) {
             if(!game.isFinish()) {
@@ -89,6 +93,13 @@ public class GeneralStatistics {
         }
     }
 
+    /**
+     * This function iterates through the events of a game and if the event is a goal, it increments
+     * the number of goals of the player who scored the goal. If the number of goals of the player is
+     * greater than the maximum number of goals, the player becomes the best scorer
+     * 
+     * @param game the game to be processed
+     */
     private void processBestScorer(Game game){
         int aux;
         for(Event event : game.getEvents()) {
@@ -105,34 +116,81 @@ public class GeneralStatistics {
         }
     }
 
+    /**
+     * This function returns the best scorer of the team
+     * 
+     * @return The best scorer of the team.
+     */
     public Player getBestScorer() {
         return this.bestScorer;
     }
-
+    
+    /**
+     * If the team is in the map, return the number of wins for that team. Otherwise, return 0
+     * 
+     * @param team The team to get the number of wins for.
+     * @return The number of wins for a team.
+     */
     public int getWins(Team team) {
         return this.numberOfWins.getOrDefault(team, 0);
     }
 
+    /**
+     * If the team has a number of draws, return that number. Otherwise, return 0
+     * 
+     * @param team The team to get the number of draws for.
+     * @return The number of draws for a team.
+     */
     public int getDraws(Team team) {
         return this.numberOfDraws.getOrDefault(team, 0);
     }
 
+    /**
+     * This function returns the number of defeats of a team
+     * 
+     * @param team The team to get the number of defeats for.
+     * @return The number of defeats for a team.
+     */
     public int getDefeats(Team team) {
         return this.numberOfDefeats.getOrDefault(team, 0);
     }
 
+    /**
+     * If the team has scored goals, return the number of goals scored. Otherwise, return 0
+     * 
+     * @param team The team to get the number of goals scored for
+     * @return The number of goals scored by the team.
+     */
     public int getGoalsScored(Team team) {
         return this.numberOfGoalsScored.getOrDefault(team, 0);
     }
 
+    /**
+     * If the team is in the map, return the value, otherwise return 0
+     * 
+     * @param team The team to get the goals conceded for.
+     * @return The number of goals conceded by the team.
+     */
     public int getGoalsConceded(Team team) {
         return this.numberOfGoalsConceded.getOrDefault(team, 0);
     }
 
+    /**
+     * If the team is in the map, return the value associated with the team, otherwise return 0
+     * 
+     * @param team The team to get the points of
+     * @return The teamPoints.getOrDefault(team, 0) is being returned.
+     */
     public int getTeamPoints(Team team) {
         return this.teamPoints.getOrDefault(team, 0);
     }
 
+    /**
+     * If the team is in the map, return the number of games for that team. Otherwise, return 0
+     * 
+     * @param team The team to get the number of games for.
+     * @return The number of games played by a team.
+     */
     public int getNumberOfGames(Team team) {
         return this.numberOfGames.getOrDefault(team, 0);
     }

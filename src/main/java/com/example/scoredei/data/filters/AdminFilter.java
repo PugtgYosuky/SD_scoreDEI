@@ -18,6 +18,11 @@ import java.io.IOException;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
+/**
+ * If the user is not logged in, redirect to the login page. If the user is logged in, but not an
+ * admin, redirect to the home page. If the user is logged in and an admin, allow the request to
+ * continue.
+ */
 @Component
 @Order(1)
 public class AdminFilter implements Filter, javax.servlet.Filter {
@@ -28,6 +33,17 @@ public class AdminFilter implements Filter, javax.servlet.Filter {
         this.userService = userService;
     }
 
+    /**
+     * If the user is not logged in, redirect to the login page. If the user is logged in, but not an
+     * admin, redirect to the home page. If the user is logged in and an admin, allow the request to
+     * continue
+     * 
+     * @param request The request object represents the HTTP request that your application receives
+     * from the client.
+     * @param response The response object.
+     * @param chain The FilterChain object that represents the chain of filters that the request will
+     * pass through.
+     */
     @Override
     public void doFilter(ServletRequest request,
                          ServletResponse response,

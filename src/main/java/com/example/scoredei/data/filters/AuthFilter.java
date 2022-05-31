@@ -18,6 +18,12 @@ import java.io.IOException;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
+/**
+ * If the user is not logged in, redirect to the login page. If the user is logged in, check if the
+ * user is still in the database. If the user is not in the database, log the user out and redirect to
+ * the login page. If the user is in the database, update the user object in the session and continue
+ * with the request.
+ */
 @Component
 @Order(2)
 public class AuthFilter implements Filter, javax.servlet.Filter {
@@ -28,6 +34,18 @@ public class AuthFilter implements Filter, javax.servlet.Filter {
         this.userService = userService;
     }
 
+    /**
+     * If the user is not logged in, redirect to the login page. If the user is logged in, check if the
+     * user is still in the database. If the user is not in the database, log the user out and redirect
+     * to the login page. If the user is in the database, update the user object in the session and
+     * continue with the request
+     * 
+     * @param request The request object represents the HTTP request that your application receives
+     * from the client.
+     * @param response The response object.
+     * @param chain The FilterChain object that represents the filter chain to which this filter
+     * belongs.
+     */
     @Override
     public void doFilter(ServletRequest request,
                          ServletResponse response,
@@ -50,7 +68,7 @@ public class AuthFilter implements Filter, javax.servlet.Filter {
             chain.doFilter(request, response);
         }
     }
-
+    
     @Override
     public boolean isLoggable(LogRecord record) {
         return false;

@@ -32,6 +32,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Controller that handles all the admin requests.
+ */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -143,6 +146,13 @@ public class AdminController {
         return "redirect:/teams";
     }
 
+   /**
+    * This function is used to add a game to the database.
+    * 
+    * @param model The model is a Map of object names to object values. The model is used to pass data
+    * from the controller to the view.
+    * @return A String with the html file name
+    */
     @GetMapping("/add-game")
     public String addGame(Model model) {
         model.addAttribute("gameForm", new GameForm());
@@ -150,6 +160,15 @@ public class AdminController {
         return "add-game";
     }
 
+    /**
+     * It creates a game between two teams, and if the game is not completed, it returns an error
+     * message
+     * 
+     * @param gameForm a class that contains the game and the two teams
+     * @param model The model is a Map of key/value pairs which the view can use to render dynamic
+     * content.
+     * @return A String
+     */
     @PostMapping("/create-game")
     public String createGame(@ModelAttribute GameForm gameForm, Model model) {
         gameForm.getGame().addTeam(gameForm.getTeamA());
@@ -168,6 +187,12 @@ public class AdminController {
         return "redirect:/games";
     }
 
+    /**
+     * This function is used to add a player to the database
+     * 
+     * @param model This is the model that will be passed to the view.
+     * @return A string that is the name of the html file.
+     */
     @GetMapping("/add-player")
     public String addPlayer(Model model) {
         model.addAttribute("player", new Player());
@@ -175,6 +200,13 @@ public class AdminController {
         return "add-player";
     }
 
+    /**
+     * It takes a player object, checks if it's valid, and if it is, it adds it to the database
+     * 
+     * @param player the player object that is being created
+     * @param model The model is a Map of model objects, which can be used to pass data to the view.
+     * @return A string that is the name of the html file.
+     */
     @PostMapping("/create-player")
     public String createPlayer(@ModelAttribute Player player, Model model) {
         if(!player.isCompleted()) {
@@ -188,6 +220,12 @@ public class AdminController {
 
     // *********************** GET USERS ***********************
 
+    /**
+     * The function getUsers() is a function that returns a list of users
+     * 
+     * @param model This is the model object that is used to pass data from the controller to the view.
+     * @return A string that is the name of the html file.
+     */
     @GetMapping("/users")
     public String getUsers(Model model) {
         model.addAttribute("users", this.userService.getUsers());
@@ -196,6 +234,14 @@ public class AdminController {
 
     // *********************** EDIT METHODS ***********************
 
+    /**
+     * If the team exists, then return the edit-team page with the team's information. Otherwise,
+     * redirect to the teams page
+     * 
+     * @param model The model object is used to pass data from the controller to the view.
+     * @param id the id of the team to edit
+     * @return A string that is the name of the html file.
+     */
     @GetMapping("/edit-team")
     public String editTeam(Model model, @RequestParam(name="id", required=true) int id) {
         Optional<Team> team = this.teamService.getTeam(id);
@@ -207,12 +253,26 @@ public class AdminController {
         } 
     }
 
+    /**
+     * This function takes a Team object as a parameter, and then saves it to the database.
+     * 
+     * @param team the team object that is being edited
+     * @return A redirect to the teams page.
+     */
     @PostMapping("/save-edit-team")
     public String saveEditTeam(@ModelAttribute Team team) {
         this.teamService.addTeam(team);
         return "redirect:/teams";
     }
 
+    /**
+     * If the player exists, then add the player to the model and return the edit-player page.
+     * Otherwise, redirect to the players page
+     * 
+     * @param model The model is a map of values that will be passed to the view.
+     * @param id the id of the player to edit
+     * @return The edit-player.html page
+     */
     @GetMapping ("/edit-player")
     public String editPlayer(Model model, @RequestParam(name="id", required=true) int id){
         Optional<Player> player = this.playerService.getPlayer(id);
@@ -225,12 +285,26 @@ public class AdminController {
         }
     }
 
+    /**
+     * The function takes a player object as a parameter, and then saves the player object to the
+     * database
+     * 
+     * @param player the player object that is being edited
+     * @return A redirect to the players page.
+     */
     @PostMapping("/save-edit-player")
     public String saveEditPlayer(@ModelAttribute Player player) {
         this.playerService.addPlayer(player);
         return "redirect:/players";
     }
 
+    /**
+     * If the game is present, add the game to the model and return the edit-game page
+     * 
+     * @param id the id of the game to edit
+     * @param model The model is a Map of model objects, which can be used to pass data to the view.
+     * @return A string that is the name of the html file.
+     */
     @GetMapping("/edit-game")
     public String editGame(@RequestParam(name="id", required=true) int id, Model model) {
         Optional<Game> game = this.gameService.getGame(id);
@@ -243,6 +317,14 @@ public class AdminController {
         }
     }
 
+    /**
+     * The function takes a GameForm object as a parameter, sets the teamA and teamB properties of the
+     * Game object in the GameForm object to the teamA and teamB properties of the GameForm object, and
+     * then saves the Game object in the GameForm object to the database.
+     * 
+     * @param gameForm 
+     * @return A redirect to the games page.
+     */
     @PostMapping("/save-edit-game")
     public String saveEditGame(@ModelAttribute GameForm gameForm) {
         gameForm.getGame().setTeamA(gameForm.getTeamA());
@@ -251,6 +333,14 @@ public class AdminController {
         return "redirect:/games";
     }
 
+    /**
+     * This function takes in a user id, and if the user exists, it returns the edit-user page with the
+     * user's information. If the user doesn't exist, it returns the 404 page with a message
+     * 
+     * @param id the id of the user to edit
+     * @param model The model is an object that holds data that you want to pass to the view.
+     * @return A string that is the name of the html file.
+     */
     @GetMapping("/edit-user")
     public String editUser(@RequestParam(name="id", required=true) int id, Model model){
         Optional<User> user = this.userService.getUser(id);
@@ -263,6 +353,13 @@ public class AdminController {
         return "404";
     }
 
+    /**
+     * It takes a user object from the form, saves it to the database, and then redirects to the
+     * admin/users page
+     * 
+     * @param user the user object that is being edited
+     * @return A redirect to the admin/users page.
+     */
     @PostMapping("/save-edit-user")
     public String saveEditUser(@ModelAttribute User user) {
         this.userService.addUser(user);
@@ -271,6 +368,13 @@ public class AdminController {
 
     // *********************** DELETE METHODS ***********************
 
+    /**
+     * If the game is deleted, redirect to the games page, otherwise, return a 404 page
+     * 
+     * @param id the id of the game to be deleted
+     * @param model The model is an object that holds data that you want to pass to the view.
+     * @return A string that is the name of the html file.
+     */
     @PostMapping("/delete-game")
     public String deleteGame(@RequestParam(name="id", required=true) int id, Model model) {
         if(this.gameService.deleteGame(id))
@@ -280,6 +384,13 @@ public class AdminController {
         return "404";
     }
 
+    /**
+     * If the player is deleted, redirect to the players page, otherwise return a 404 page
+     * 
+     * @param id the id of the player to be deleted
+     * @param model The model is an object that holds data that you want to pass to the view.
+     * @return A string that is the name of the html file.
+     */
     @PostMapping("/delete-player")
     public String deletePlayer(@RequestParam(name="id", required=true) int id, Model model) {
         if(this.playerService.deletePlayer(id))
@@ -289,6 +400,13 @@ public class AdminController {
         return "404";
     }
 
+    /**
+     * It deletes a team from the database and redirects to the teams page
+     * 
+     * @param id the id of the team to be deleted
+     * @param model The model is an object that holds data that you want to pass to the view.
+     * @return A string that is the name of the html file.
+     */
     @PostMapping("/delete-team")
     public String deleteTeam(@RequestParam(name="id", required=true) int id, Model model) {
         if(this.teamService.deleteTeam(id))
@@ -298,6 +416,13 @@ public class AdminController {
         return "404";
     }
 
+    /**
+     * It deletes a user from the database and redirects to the users page
+     * 
+     * @param id the id of the user to be deleted
+     * @param model The model is an object that holds data that you want to pass to the view.
+     * @return A string that is the name of the html file.
+     */
     @PostMapping("/delete-user")
     public String deleteUser(@RequestParam(name="id", required=true) int id, Model model) {
         if(this.userService.deleteUser(id))
@@ -305,12 +430,19 @@ public class AdminController {
         model.addAttribute("prev", "/admin/users");
         model.addAttribute("message", "User not found");
         return "404";
-
     }
 
 
     //************************ POPULATE DATABASE ************************/
     
+    /**
+     * It takes a team, a teamID and a key as parameters and then it uses the key to get the players of
+     * the team with the given teamID and then it adds them to the team
+     * 
+     * @param team The team object that the players will be added to
+     * @param teamID The ID of the team you want to get the players from.
+     * @param key API key
+     */
     private void addPlayers(Team team, int teamID, String key) {
 
         try {
@@ -343,6 +475,12 @@ public class AdminController {
         }
     }
 
+    /**
+     * It gets a list of teams from an API, creates a Team object for each team, and adds it to the
+     * database
+     * 
+     * @return A JSONObject
+     */
     @PostMapping("/populate-database")
     public String populateDatabase() {
 
@@ -387,6 +525,11 @@ public class AdminController {
         return "redirect:/games";
     }
 
+    /**
+     * It creates 10 games with 10 random events each
+     * 
+     * @return A String
+     */
     @PostMapping("/populate-games")
     public String populateGames() {
         List<Team> allTeams = this.teamService.getTeams();

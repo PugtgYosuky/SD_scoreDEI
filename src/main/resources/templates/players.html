@@ -11,6 +11,13 @@
         <center>
             <a th:if="${session.user?.isAdmin}" class="btn btn-primary btn-sm" href="/admin/add-player">Add Player</a>
         </center>
+        <h1>Best Scorer</h1>
+        <div th:if="${generalStatistics.getBestScorer()}">
+            <h2 th:text="${generalStatistics.getBestScorer().name + ' - ' + generalStatistics.getBestScorer().getTeam().name }"></h2>
+        </div>
+        <div th:if="${generalStatistics.getBestScorer() == null}">
+            <h2>Not found</h2>
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>
